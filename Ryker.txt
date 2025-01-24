@@ -1,0 +1,3 @@
+This is the Ryker.txt file
+Welcome in
+Hello World I guess
