@@ -1,3 +1,5 @@
+# Project Launch Document
+
 **Weekly Meeting Schedule**: Fridays from 2-5PM Hybrid meeting with on-campus group in the library and a videoconference via Discord.
 
 **Communication:** Via Discord  
