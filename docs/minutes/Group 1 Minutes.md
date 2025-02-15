@@ -83,56 +83,74 @@
 ### Agenda:
 
 1. Look at changing from Trello to Zenhub
-
    1. Can also use Jira or GitHub project
-
    2. Prof. Ratul doesn’t want us using Trello
-
 2. Project documentation mirrored on GitHub (Harrison’s responsibility)
-
    1. Again, at Prof. Ratul’s request
-
    2. Please use the “heading” formatting options in Docs to make it easier for Harrison
-
 3. Look at Milestone 2 deliverables
-
 4. Make assignments for Milestone 2 work
-
 5. Learn how to use git branches
-
 6. Discuss pushing meeting to 2:30 expected start
 
 ### Minutes
 
 2:40 start
-
 2:45 Migrating issues to ZenHub
-
 2:57 ZenHub migration complete
-
 2:58 Discussion of documentation mirroring to GitHub
-
 3:01 GitHub docs moved to docs/ folder
-
 3:02 Began reviewing Milestone 2 deliverables
-
 3:05 began revising documentation
-
 3:07 revising SRS document
-
 3:14 Assigning action items
-
 3:24 Made decision to move meeting to 2:30 start
-
 3:25 Teaching Chun how to use git branches
 
-## Action Items
+### Action Items
 
 Curtis Airmet: Create Use Case diagram and embed in SRS document
-
 Ryker Gibbons and Kevin Bailey: Create tests and complete CRUD for tasks and classes. Relationship between tasks and courses, tasks have due dates, titles and descriptions. Courses have a title. Create UML class diagrams to describe these objects/classes.
-
 Harrison Payne: Update docs on GitHub, review code by Kevin and Ryker
-
 Chun Poon: UML Sequence diagram, learn about git branches by practicing
 
+## \~ 2/14/25 \~
+
+### Attendance
+
+*Kevin Bailey excused travel absence. All other members present.*
+
+### Agenda
+
+1. Review deliverables for Milestone 2 and ensure we’re on track to make them all
+   1. Next Thursday the 20th\!
+2. Discuss implementing type hinting into codebase
+3. Merge Kevin’s PR
+4. Assign action items for next sprint
+
+### Minutes
+
+2:45 Meeting Start
+2:50 Reviewing deliverables for Milestone 2
+2:52 Noted that the code and tests are around halfway complete
+2:53 Noted that we still need the Use Case (diagram) in the SRS document
+2:54 Noted that we need to finish the sequence diagram and embed in the SRS document
+2:55 Noted that we still need a screenshot of the board at the end of the sprint
+3:05 Finished, exported, and embedded the Sequence Diagram
+3:06 Updating ZenHub board to reflect progress so far
+3:12 Curtis is finishing the Use Case diagram
+3:15 Looked at code
+3:16 Noted that we still need to add type hinting and docstrings to the code
+3:17 Merged code
+3:18 Tagged the merge commit as v0.1.0
+3:22 Assigned action items for the week
+3:26 Discuss code specifics with Ryker Gibbons
+3:59 Discussed type hinting, docstrings, and making the branch for this week
+
+### Action Items
+
+Harrison Payne: Update Docs
+Ryker Gibbons and Kevin Bailey: Finish CLI application and test suite
+Kevin Bailey: Make UML Class Diagram
+Chun Poon: Verify tests, report bugs
+Curtis Airmet: Finish Use Case Diagram and embed in SRS document. Screenshot ZenHub board and upload to Agile Artifacts Document
