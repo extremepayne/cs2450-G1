@@ -80,3 +80,7 @@ Minimal task creation should take three clicks/taps or less
 
 - Group coordination (Story 5\)
 
+## Sequence Diagram
+
+![Sequence Diagram](images/Sequence_diagram1.webp)
+
