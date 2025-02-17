@@ -45,6 +45,7 @@ def save_tasks(tasks):
 def create_course():
     courses = load_courses()
     new_course = {
+        # Need to account for a user entering in data in an incorrect format
         "id": len(courses) + 1,
         "name": input("Enter course name: "),
         "description": input("Enter course description: "),
@@ -65,7 +66,7 @@ def list_course():
 
 def delete_course():
     courses = load_courses()
-    course_id = int(input("Enter course ID to delete: "))
+    course_id = int(input("Enter course ID to delete: ")) # Need to account for trying to delete an invalid course
     courses = [course for course in courses if course["id"] != course_id]
     save_courses(courses)
     print("Course deleted successfully.")
@@ -73,8 +74,9 @@ def delete_course():
 
 def edit_course():
     courses = load_courses()
-    course_id = int(input("Enter course ID to edit: "))
+    course_id = int(input("Enter course ID to edit: ")) # Need to account for trying to edit an invalid course
     for course in courses:
+        # Could we introduce an option here if a user wants to keep specific details the same?
         if course["id"] == course_id:
             course["name"] = input("Enter new course name: ")
             course["description"] = input("Enter new course description: ")
@@ -89,6 +91,7 @@ def edit_course():
 def create_task():
     tasks = load_tasks()
     new_task = {
+        # Need to account for a user entering in data in an incorrect format
         "task_id": len(tasks) + 1,
         "title": input("Enter task title: "),
         "description": input("Enter task description: "),
@@ -111,7 +114,7 @@ def list_task():
 
 def delete_task():
     tasks = load_tasks()
-    task_id = int(input("Enter task ID to delete: "))
+    task_id = int(input("Enter task ID to delete: ")) # Need to account for trying to delete an invalid task
     tasks = [task for task in tasks if task["task_id"] != task_id]
     save_tasks(tasks)
     print("Task deleted successfully.")
@@ -119,9 +122,10 @@ def delete_task():
 
 def edit_task():
     tasks = load_tasks()
-    task_id = int(input("Enter task ID to edit: "))
+    task_id = int(input("Enter task ID to edit: ")) # Need to account for trying to edit an invalid task
     for task in tasks:
         if task["task_id"] == task_id:
+            # Again, introducing an option to keep certain details the same could be nice
             task["title"] = input("Enter new task title: ")
             task["description"] = input("Enter new task description: ")
             task["due_date"] = input("Enter new due date: ")
@@ -166,12 +170,17 @@ def parse_flags():
     }
 
     if len(sys.argv) < 2:
+        # User won't know any flags when first executing the program. Maybe print the list here as well?
         print("No flags provided. Use -h for help.")
         return
 
     flag = sys.argv[1]
     if flag in flags:
         print(f"Flag detected: {flags[flag]}")
+
+        # Code detects flags, but doesn't do anything except for help flag
+        # Switches would be good to use here
+
         if flag == "-h":
             print(
                 """
