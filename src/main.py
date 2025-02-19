@@ -16,6 +16,7 @@ from typing import List, Dict, Any
 COURSE_FILE = "courses.json"
 TASK_FILE = "tasks.json"
 
+
 def load_courses() -> List[Dict[str, Any]]:
     try:
         with open(COURSE_FILE, "r") as file:
@@ -23,9 +24,11 @@ def load_courses() -> List[Dict[str, Any]]:
     except FileNotFoundError:
         return []
 
+
 def save_courses(courses: List[Dict[str, Any]]) -> None:
     with open(COURSE_FILE, "w") as file:
         json.dump(courses, file, indent=4)
+
 
 def load_tasks() -> List[Dict[str, Any]]:
     try:
@@ -34,9 +37,11 @@ def load_tasks() -> List[Dict[str, Any]]:
     except FileNotFoundError:
         return []
 
+
 def save_tasks(tasks: List[Dict[str, Any]]) -> None:
     with open(TASK_FILE, "w") as file:
         json.dump(tasks, file, indent=4)
+
 
 def create_course() -> None:
     courses = load_courses()
@@ -52,10 +57,12 @@ def create_course() -> None:
     save_courses(courses)
     print("Course created successfully.")
 
+
 def list_course() -> None:
     courses = load_courses()
     for course in courses:
         print(f"ID: {course['id']}, Name: {course['name']}, Code: {course['code']}")
+
 
 def delete_course() -> None:
     courses = load_courses()
@@ -63,6 +70,7 @@ def delete_course() -> None:
     courses = [course for course in courses if course["id"] != course_id]
     save_courses(courses)
     print("Course deleted successfully.")
+
 
 def edit_course() -> None:
     courses = load_courses()
@@ -87,13 +95,14 @@ def edit_course() -> None:
     save_courses(courses)
     print("Course edited successfully.")
 
+
 def create_task() -> None:
     tasks = load_tasks()
     courses = load_courses()
     course_ids = [course["id"] for course in courses]
 
     # while loop to validate course_id input
-    while  True:
+    while True:
         try:
             course_id = int(input("Enter course ID: "))
             if course_id not in course_ids or type(course_id) != int:
@@ -103,7 +112,7 @@ def create_task() -> None:
             print("Invalid input. Please enter a valid course ID.")
             continue
         break
-    
+
     new_task = {
         "task_id": len(tasks) + 1,
         "title": input("Enter task title: "),
@@ -116,12 +125,14 @@ def create_task() -> None:
     save_tasks(tasks)
     print("Task created successfully.")
 
+
 def list_task() -> None:
     tasks = load_tasks()
     for task in tasks:
         print(
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
+
 
 def delete_task() -> None:
     tasks = load_tasks()
@@ -140,6 +151,7 @@ def delete_task() -> None:
     tasks = [task for task in tasks if task["task_id"] != task_id]
     save_tasks(tasks)
     print("Task deleted successfully.")
+
 
 def edit_task() -> None:
     tasks = load_tasks()
@@ -165,6 +177,7 @@ def edit_task() -> None:
     save_tasks(tasks)
     print("Task edited successfully.")
 
+
 def filter_tasks_by_due_date(due_date: str) -> None:
     tasks = load_tasks()
     filtered_tasks = [task for task in tasks if task["due_date"] == due_date]
@@ -172,6 +185,7 @@ def filter_tasks_by_due_date(due_date: str) -> None:
         print(
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
+
 
 def filter_tasks_by_course(course_id: int) -> None:
     tasks = load_tasks()
@@ -181,31 +195,33 @@ def filter_tasks_by_course(course_id: int) -> None:
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
 
+
 def parse_flags() -> None:
     flags = {
-        '-h': 'help',
-        '-cc': 'create_course',
-        '-lc': 'list_course',
-        '-dc': 'delete_course',
-        '-ec': 'edit_course',
-        '-ct': 'create_task',
-        '-lt': 'list_task',
-        '-dt': 'delete_task',
-        '-et': 'edit_task',
-        '-fd': 'filter_due_date',
-        '-fc': 'filter_course'
+        "-h": "help",
+        "-cc": "create_course",
+        "-lc": "list_course",
+        "-dc": "delete_course",
+        "-ec": "edit_course",
+        "-ct": "create_task",
+        "-lt": "list_task",
+        "-dt": "delete_task",
+        "-et": "edit_task",
+        "-fd": "filter_due_date",
+        "-fc": "filter_course",
     }
-    
+
     if len(sys.argv) < 2:
         print("No flags provided. Use -h for help.")
         return
-    
+
     flag = sys.argv[1]
     if flag in flags:
         print(f"Flag detected: {flags[flag]}")
         match flag:
-            case '-h':
-                print("""
+            case "-h":
+                print(
+                    """
                 Usage: main.py [flag]
                 Flags:
                 -h   Show this help message
@@ -219,27 +235,28 @@ def parse_flags() -> None:
                 -et  Edit a task
                 -fd  Filter tasks by due date
                 -fc  Filter tasks by course ID
-                """)
-            case '-cc':
+                """
+                )
+            case "-cc":
                 create_course()
-            case '-lc':
+            case "-lc":
                 list_course()
-            case '-dc':
+            case "-dc":
                 delete_course()
-            case '-ec':
+            case "-ec":
                 edit_course()
-            case '-ct':
+            case "-ct":
                 create_task()
-            case '-lt':
+            case "-lt":
                 list_task()
-            case '-dt':
+            case "-dt":
                 delete_task()
-            case '-et':
+            case "-et":
                 edit_task()
-            case '-fd':
+            case "-fd":
                 due_date = input("Enter due date to filter tasks: ")
                 filter_tasks_by_due_date(due_date)
-            case '-fc':
+            case "-fc":
                 while True:
                     try:
                         course_id = int(input("Enter course ID to filter tasks: "))
@@ -254,8 +271,10 @@ def parse_flags() -> None:
     else:
         print("Unknown flag. Use -h for help.")
 
+
 def main() -> None:
     parse_flags()
+
 
 if __name__ == "__main__":
     main()
