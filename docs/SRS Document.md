@@ -40,7 +40,37 @@ Story 18: As a student, I want to be able to customize my schedule to my specifi
 
 ## Use Cases
 
-\[insert diagram here\]
+Some use cases include:
+
+1. Add tasks
+
+2. Add courses
+
+3. View tasks
+
+    i. Sorted by due date
+
+    ii. Sorted by priority
+
+    iii. Sorted by # of points on grade
+
+    iv. Sorted by course
+    
+    v. sorted by course
+
+4. View courses
+
+And, if we decide to implement the group work enhancement.
+
+5. View groups
+
+    i. View contact information for members of groups
+
+    ii. View roles for members of groups
+
+You can see these use cases presented visually in the UML diagram below:
+
+![Use case diagram](images/Use_case_diagram.webp)
 
 ## Functional Requirements
 
@@ -79,4 +109,8 @@ Minimal task creation should take three clicks/taps or less
 - Priority system (e.g. points per assignment, expected workload) (Story 10, 14\)
 
 - Group coordination (Story 5\)
+
+## Sequence Diagram
+
+![Sequence Diagram](images/Sequence_diagram1.webp)
 
