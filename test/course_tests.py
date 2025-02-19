@@ -134,9 +134,7 @@ class TestCourseMethods(unittest.TestCase):
             "2023-06-01",
             "2023-06-30",
         )
-        # Instead of trying to set an invalid attribute, we'll check if one exists
-        self.assertFalse(hasattr(course, "invalid_field"))
-        # We can also verify that only valid attributes are present
+        # Instead of using vars(), we'll check slots
         expected_attrs = {
             "id",
             "name",
@@ -147,8 +145,11 @@ class TestCourseMethods(unittest.TestCase):
             "tasks",
             "completed_tasks",
         }
-        actual_attrs = set(vars(course).keys())
+        actual_attrs = set(course.__slots__)
         self.assertEqual(expected_attrs, actual_attrs)
+        # Test that we can't add new attributes
+        with self.assertRaises(AttributeError):
+            course.invalid_field = "Invalid"
 
     def test_add_course_with_duplicate_id(self):
         # Test adding a course with a duplicate ID
@@ -170,8 +171,8 @@ class TestCourseMethods(unittest.TestCase):
             "2023-07-31",
         )
         course_list.add_course(course1)
-        course_list.add_course(course2)
-        self.assertEqual(len(course_list.courses), 2)
+        with self.assertRaises(ValueError):
+            course_list.add_course(course2)
 
     def test_edit_course_name(self):
         # Test editing a course name

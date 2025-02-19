@@ -47,6 +47,19 @@ class Course:
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert Course instance to dictionary for JSON serialization."""
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "code": self.code,
+            "end_date": self.end_date,
+            "start_date": self.start_date,
+            "tasks": self.tasks,
+            "completed_tasks": self.completed_tasks,
+        }
+
     def add_task(self, task: dict) -> None:
         """
         Add a task to the course's task list.
@@ -114,7 +127,7 @@ class CourseList:
     def save_courses(self) -> None:
         """Save current courses to the JSON file."""
         with open(COURSE_FILE, "w") as file:
-            json.dump([course.__dict__ for course in self.courses], file, indent=4)
+            json.dump([course.to_dict() for course in self.courses], file, indent=4)
 
     def add_course(self, course: Course) -> None:
         """
