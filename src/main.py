@@ -1,5 +1,6 @@
 import sys
 import json
+from typing import List, Dict, Any
 
 # No "menu" setup, we will run this CLI app by the flags we set
 # -h, help
@@ -16,7 +17,7 @@ COURSE_FILE = "courses.json"
 TASK_FILE = "tasks.json"
 
 
-def load_courses():
+def load_courses() -> List[Dict[str, Any]]:
     try:
         with open(COURSE_FILE, "r") as file:
             return json.load(file)
@@ -24,12 +25,12 @@ def load_courses():
         return []
 
 
-def save_courses(courses):
+def save_courses(courses: List[Dict[str, Any]]) -> None:
     with open(COURSE_FILE, "w") as file:
         json.dump(courses, file, indent=4)
 
 
-def load_tasks():
+def load_tasks() -> List[Dict[str, Any]]:
     try:
         with open(TASK_FILE, "r") as file:
             return json.load(file)
@@ -37,12 +38,12 @@ def load_tasks():
         return []
 
 
-def save_tasks(tasks):
+def save_tasks(tasks: List[Dict[str, Any]]) -> None:
     with open(TASK_FILE, "w") as file:
         json.dump(tasks, file, indent=4)
 
 
-def create_course():
+def create_course() -> None:
     courses = load_courses()
     new_course = {
         "id": len(courses) + 1,
@@ -57,13 +58,13 @@ def create_course():
     print("Course created successfully.")
 
 
-def list_course():
+def list_course() -> None:
     courses = load_courses()
     for course in courses:
         print(f"ID: {course['id']}, Name: {course['name']}, Code: {course['code']}")
 
 
-def delete_course():
+def delete_course() -> None:
     courses = load_courses()
     course_id = int(input("Enter course ID to delete: "))
     courses = [course for course in courses if course["id"] != course_id]
@@ -71,9 +72,18 @@ def delete_course():
     print("Course deleted successfully.")
 
 
-def edit_course():
+def edit_course() -> None:
     courses = load_courses()
-    course_id = int(input("Enter course ID to edit: "))
+    while True:
+        try:
+            course_id = int(input("Enter course ID to edit: "))
+            if course_id not in [course["id"] for course in courses]:
+                print("Invalid course ID. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a valid course ID.")
+            continue
+        break
     for course in courses:
         if course["id"] == course_id:
             course["name"] = input("Enter new course name: ")
@@ -86,14 +96,29 @@ def edit_course():
     print("Course edited successfully.")
 
 
-def create_task():
+def create_task() -> None:
     tasks = load_tasks()
+    courses = load_courses()
+    course_ids = [course["id"] for course in courses]
+
+    # while loop to validate course_id input
+    while True:
+        try:
+            course_id = int(input("Enter course ID: "))
+            if course_id not in course_ids or type(course_id) != int:
+                print("Invalid course ID. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a valid course ID.")
+            continue
+        break
+
     new_task = {
         "task_id": len(tasks) + 1,
         "title": input("Enter task title: "),
         "description": input("Enter task description: "),
         "due_date": input("Enter due date: "),
-        "course_id": int(input("Enter course ID: ")),
+        "course_id": course_id,
         "status": "pending",
     }
     tasks.append(new_task)
@@ -101,7 +126,7 @@ def create_task():
     print("Task created successfully.")
 
 
-def list_task():
+def list_task() -> None:
     tasks = load_tasks()
     for task in tasks:
         print(
@@ -109,17 +134,38 @@ def list_task():
         )
 
 
-def delete_task():
+def delete_task() -> None:
     tasks = load_tasks()
-    task_id = int(input("Enter task ID to delete: "))
+
+    # while loop to validate task_id input
+    while True:
+        try:
+            task_id = int(input("Enter task ID to delete: "))
+            if task_id not in [task["task_id"] for task in tasks]:
+                print("Invalid task ID. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a valid task ID.")
+            continue
+        break
     tasks = [task for task in tasks if task["task_id"] != task_id]
     save_tasks(tasks)
     print("Task deleted successfully.")
 
 
-def edit_task():
+def edit_task() -> None:
     tasks = load_tasks()
-    task_id = int(input("Enter task ID to edit: "))
+    # while loop to validate task_id input
+    while True:
+        try:
+            task_id = int(input("Enter task ID to edit: "))
+            if task_id not in [task["task_id"] for task in tasks]:
+                print("Invalid task ID. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please enter a valid task ID.")
+            continue
+        break
     for task in tasks:
         if task["task_id"] == task_id:
             task["title"] = input("Enter new task title: ")
@@ -132,7 +178,7 @@ def edit_task():
     print("Task edited successfully.")
 
 
-def filter_tasks_by_due_date(due_date):
+def filter_tasks_by_due_date(due_date: str) -> None:
     tasks = load_tasks()
     filtered_tasks = [task for task in tasks if task["due_date"] == due_date]
     for task in filtered_tasks:
@@ -141,7 +187,7 @@ def filter_tasks_by_due_date(due_date):
         )
 
 
-def filter_tasks_by_course(course_id):
+def filter_tasks_by_course(course_id: int) -> None:
     tasks = load_tasks()
     filtered_tasks = [task for task in tasks if task["course_id"] == course_id]
     for task in filtered_tasks:
@@ -150,7 +196,7 @@ def filter_tasks_by_course(course_id):
         )
 
 
-def parse_flags():
+def parse_flags() -> None:
     flags = {
         "-h": "help",
         "-cc": "create_course",
@@ -172,29 +218,61 @@ def parse_flags():
     flag = sys.argv[1]
     if flag in flags:
         print(f"Flag detected: {flags[flag]}")
-        if flag == "-h":
-            print(
+        match flag:
+            case "-h":
+                print(
+                    """
+                Usage: main.py [flag]
+                Flags:
+                -h   Show this help message
+                -cc  Create a new course
+                -lc  List all courses
+                -dc  Delete a course
+                -ec  Edit a course
+                -ct  Create a new task
+                -lt  List all tasks
+                -dt  Delete a task
+                -et  Edit a task
+                -fd  Filter tasks by due date
+                -fc  Filter tasks by course ID
                 """
-            Usage: main.py [flag]
-            Flags:
-            -h   Show this help message
-            -cc  Create a new course
-            -lc  List all courses
-            -dc  Delete a course
-            -ec  Edit a course
-            -ct  Create a new task
-            -lt  List all tasks
-            -dt  Delete a task
-            -et  Edit a task
-            -fd  Filter tasks by due date
-            -fc  Filter tasks by course ID
-            """
-            )
+                )
+            case "-cc":
+                create_course()
+            case "-lc":
+                list_course()
+            case "-dc":
+                delete_course()
+            case "-ec":
+                edit_course()
+            case "-ct":
+                create_task()
+            case "-lt":
+                list_task()
+            case "-dt":
+                delete_task()
+            case "-et":
+                edit_task()
+            case "-fd":
+                due_date = input("Enter due date to filter tasks: ")
+                filter_tasks_by_due_date(due_date)
+            case "-fc":
+                while True:
+                    try:
+                        course_id = int(input("Enter course ID to filter tasks: "))
+                        if course_id not in [course["id"] for course in load_courses()]:
+                            print("Invalid course ID. Please try again.")
+                            continue
+                    except ValueError:
+                        print("Invalid input. Please enter a valid course ID.")
+                        continue
+                    break
+                filter_tasks_by_course(course_id)
     else:
         print("Unknown flag. Use -h for help.")
 
 
-def main():
+def main() -> None:
     parse_flags()
 
 
