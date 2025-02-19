@@ -40,7 +40,7 @@ Story 18: As a student, I want to be able to customize my schedule to my specifi
 
 ## Use Cases
 
-\[insert diagram here\]
+![Use case diagram](images/Use_case_diagram.webp)
 
 ## Functional Requirements
 
