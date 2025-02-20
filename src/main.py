@@ -68,7 +68,9 @@ def list_course() -> None:
 def delete_course() -> None:
     courses = load_courses()
     tasks = load_tasks()
-    course_id = int(input("Enter course ID to delete: ")) # Need to account for trying to delete an invalid course
+    course_id = int(
+        input("Enter course ID to delete: ")
+    )  # Need to account for trying to delete an invalid course
     tasks = [task for task in tasks if task["course_id"] != course_id]
     courses = [course for course in courses if course["id"] != course_id]
     save_tasks(tasks)
@@ -201,12 +203,15 @@ def filter_tasks_by_course(course_id: int) -> None:
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
 
+
 def sort_tasks_by_due_date():
     """
     Sorts tasks by due date and prints them to CLI
     """
     tasks = load_tasks()
-    sorted_tasks = sorted(tasks, key=lambda task: task["due_date"]) # Assumes format is YYYY-MM-DD
+    sorted_tasks = sorted(
+        tasks, key=lambda task: task["due_date"]
+    )  # Assumes format is YYYY-MM-DD
 
     for task in sorted_tasks:
         print(
@@ -225,6 +230,7 @@ def sort_tasks_by_course_id():
         print(
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Course ID: {task['course_id']}, Status: {task['status']}"
         )
+
 
 def parse_flags() -> None:
     flags = {
