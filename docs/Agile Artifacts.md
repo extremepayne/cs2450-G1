@@ -18,7 +18,9 @@
 
 ![zenhub screenshot 3](images/zenhub-screenshot-feb-20.png)
 
-**Github URL:** [https://github.com/extremepayne/cs2450-G1](https://github.com/extremepayne/cs2450-G1)
+## Github URL
+
+[https://github.com/extremepayne/cs2450-G1](https://github.com/extremepayne/cs2450-G1)
 
 ## Deprecated
 
