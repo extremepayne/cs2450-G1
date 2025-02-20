@@ -24,8 +24,8 @@ class Course:
         name: str,
         description: str,
         code: str,
-        end_date: str,
         start_date: str,
+        end_date: str,
     ):
         """
         Initialize a new Course instance.
