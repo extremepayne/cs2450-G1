@@ -1,5 +1,8 @@
 .DS_Store
+# Local storage files; don't need to be checked in
 courses.json
+tasks.json
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
