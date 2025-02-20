@@ -12,8 +12,8 @@ class Course:
         "name",
         "description",
         "code",
-        "end_date",
         "start_date",
+        "end_date",
         "tasks",
         "completed_tasks",
     ]
@@ -35,15 +35,15 @@ class Course:
             name (str): Name of the course
             description (str): Description of the course
             code (str): Course code
-            end_date (str): End date of the course
             start_date (str): Start date of the course
+            end_date (str): End date of the course
         """
         self.id: int = id
         self.name: str = name
         self.description: str = description
         self.code: str = code
-        self.end_date: str = end_date
         self.start_date: str = start_date
+        self.end_date: str = end_date
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
@@ -54,8 +54,8 @@ class Course:
             "name": self.name,
             "description": self.description,
             "code": self.code,
-            "end_date": self.end_date,
             "start_date": self.start_date,
+            "end_date": self.end_date,
             "tasks": self.tasks,
             "completed_tasks": self.completed_tasks,
         }
@@ -93,8 +93,8 @@ class CourseList:
             "name": course_data["name"],
             "description": course_data["description"],
             "code": course_data["code"],
-            "end_date": course_data["end_date"],
             "start_date": course_data["start_date"],
+            "end_date": course_data["end_date"],
         }
 
         # Create course instance

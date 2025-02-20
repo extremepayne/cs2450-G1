@@ -30,6 +30,7 @@ def save_courses(courses: List[Dict[str, Any]]) -> None:
         json.dump(courses, file, indent=4)
 
 
+# noinspection DuplicatedCode
 def load_tasks() -> List[Dict[str, Any]]:
     try:
         with open(TASK_FILE, "r") as file:
@@ -56,7 +57,7 @@ def create_course() -> None:
     }
     courses.append(new_course)
     save_courses(courses)
-    print("Course created successfully.")
+    print("Course created successfully. The ID is {}".format(new_course["id"]))
 
 
 def list_course() -> None:
@@ -212,6 +213,7 @@ def sort_tasks_by_due_date():
     sorted_tasks = sorted(
         tasks, key=lambda task: task["due_date"]
     )  # Assumes format is YYYY-MM-DD
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
@@ -225,6 +227,7 @@ def sort_tasks_by_course_id():
     """
     tasks = load_tasks()
     sorted_tasks = sorted(tasks, key=lambda task: task["course_id"])
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
@@ -281,25 +284,9 @@ def parse_flags() -> None:
             -sc  Sort tasks by course ID
             """
             )
+        # match flag:
+
         match flag:
-            case "-h":
-                print(
-                    """
-                Usage: main.py [flag]
-                Flags:
-                -h   Show this help message
-                -cc  Create a new course
-                -lc  List all courses
-                -dc  Delete a course
-                -ec  Edit a course
-                -ct  Create a new task
-                -lt  List all tasks
-                -dt  Delete a task
-                -et  Edit a task
-                -fd  Filter tasks by due date
-                -fc  Filter tasks by course ID
-                """
-                )
             case "-cc":
                 create_course()
             case "-lc":
@@ -316,20 +303,28 @@ def parse_flags() -> None:
                 delete_task()
             case "-et":
                 edit_task()
+            case "-sd":
+                sort_tasks_by_due_date()
+            case "-sc":
+                sort_tasks_by_course_id()
             case "-fd":
                 due_date = input("Enter due date to filter tasks: ")
                 filter_tasks_by_due_date(due_date)
             case "-fc":
+                courses = load_courses()  # Load once for efficiency
+                course_ids = {course["id"] for course in courses}  # Use a set for fast lookup
+
                 while True:
                     try:
                         course_id = int(input("Enter course ID to filter tasks: "))
-                        if course_id not in [course["id"] for course in load_courses()]:
+                        if course_id not in course_ids:
                             print("Invalid course ID. Please try again.")
                             continue
                     except ValueError:
                         print("Invalid input. Please enter a valid course ID.")
                         continue
                     break
+
                 filter_tasks_by_course(course_id)
 
     else:
