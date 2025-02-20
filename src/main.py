@@ -30,6 +30,7 @@ def save_courses(courses: List[Dict[str, Any]]) -> None:
         json.dump(courses, file, indent=4)
 
 
+# noinspection DuplicatedCode
 def load_tasks() -> List[Dict[str, Any]]:
     try:
         with open(TASK_FILE, "r") as file:
@@ -46,6 +47,7 @@ def save_tasks(tasks: List[Dict[str, Any]]) -> None:
 def create_course() -> None:
     courses = load_courses()
     new_course = {
+        # Need to account for a user entering in data in an incorrect format
         "id": len(courses) + 1,
         "name": input("Enter course name: "),
         "description": input("Enter course description: "),
@@ -55,7 +57,7 @@ def create_course() -> None:
     }
     courses.append(new_course)
     save_courses(courses)
-    print("Course created successfully.")
+    print("Course created successfully. The ID is {}".format(new_course["id"]))
 
 
 def list_course() -> None:
@@ -66,10 +68,15 @@ def list_course() -> None:
 
 def delete_course() -> None:
     courses = load_courses()
-    course_id = int(input("Enter course ID to delete: "))
+    tasks = load_tasks()
+    course_id = int(
+        input("Enter course ID to delete: ")
+    )  # Need to account for trying to delete an invalid course
+    tasks = [task for task in tasks if task["course_id"] != course_id]
     courses = [course for course in courses if course["id"] != course_id]
+    save_tasks(tasks)
     save_courses(courses)
-    print("Course deleted successfully.")
+    print("Course and associated tasks deleted successfully.")
 
 
 def edit_course() -> None:
@@ -85,6 +92,7 @@ def edit_course() -> None:
             continue
         break
     for course in courses:
+        # Could we introduce an option here if a user wants to keep specific details the same?
         if course["id"] == course_id:
             course["name"] = input("Enter new course name: ")
             course["description"] = input("Enter new course description: ")
@@ -114,6 +122,7 @@ def create_task() -> None:
         break
 
     new_task = {
+        # Need to account for a user entering in data in an incorrect format
         "task_id": len(tasks) + 1,
         "title": input("Enter task title: "),
         "description": input("Enter task description: "),
@@ -136,7 +145,6 @@ def list_task() -> None:
 
 def delete_task() -> None:
     tasks = load_tasks()
-
     # while loop to validate task_id input
     while True:
         try:
@@ -168,6 +176,7 @@ def edit_task() -> None:
         break
     for task in tasks:
         if task["task_id"] == task_id:
+            # Again, introducing an option to keep certain details the same could be nice
             task["title"] = input("Enter new task title: ")
             task["description"] = input("Enter new task description: ")
             task["due_date"] = input("Enter new due date: ")
@@ -196,6 +205,36 @@ def filter_tasks_by_course(course_id: int) -> None:
         )
 
 
+def sort_tasks_by_due_date():
+    """
+    Sorts tasks by due date and prints them to CLI
+    """
+    tasks = load_tasks()
+    sorted_tasks = sorted(
+        tasks, key=lambda task: task["due_date"]
+    )  # Assumes format is YYYY-MM-DD
+    save_tasks(sorted_tasks)
+
+    for task in sorted_tasks:
+        print(
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
+        )
+
+
+def sort_tasks_by_course_id():
+    """
+    Sorts tasks by course ID and prints them to CLI
+    """
+    tasks = load_tasks()
+    sorted_tasks = sorted(tasks, key=lambda task: task["course_id"])
+    save_tasks(sorted_tasks)
+
+    for task in sorted_tasks:
+        print(
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Course ID: {task['course_id']}, Status: {task['status']}"
+        )
+
+
 def parse_flags() -> None:
     flags = {
         "-h": "help",
@@ -209,34 +248,45 @@ def parse_flags() -> None:
         "-et": "edit_task",
         "-fd": "filter_due_date",
         "-fc": "filter_course",
+        "-sd": "sort_by_due_date",
+        "-sc": "sort_by_course",
     }
 
     if len(sys.argv) < 2:
+        # User won't know any flags when first executing the program. Maybe print the list here as well?
         print("No flags provided. Use -h for help.")
         return
 
     flag = sys.argv[1]
     if flag in flags:
         print(f"Flag detected: {flags[flag]}")
-        match flag:
-            case "-h":
-                print(
-                    """
-                Usage: main.py [flag]
-                Flags:
-                -h   Show this help message
-                -cc  Create a new course
-                -lc  List all courses
-                -dc  Delete a course
-                -ec  Edit a course
-                -ct  Create a new task
-                -lt  List all tasks
-                -dt  Delete a task
-                -et  Edit a task
-                -fd  Filter tasks by due date
-                -fc  Filter tasks by course ID
+
+        # Code detects flags, but doesn't do anything except for help flag
+        # Switches would be good to use here
+
+        if flag == "-h":
+            print(
                 """
-                )
+            Usage: main.py [flag]
+            Flags:
+            -h   Show this help message
+            -cc  Create a new course
+            -lc  List all courses
+            -dc  Delete a course
+            -ec  Edit a course
+            -ct  Create a new task
+            -lt  List all tasks
+            -dt  Delete a task
+            -et  Edit a task
+            -fd  Filter tasks by due date
+            -fc  Filter tasks by course ID
+            -sd  Sort tasks by due date
+            -sc  Sort tasks by course ID
+            """
+            )
+        # match flag:
+
+        match flag:
             case "-cc":
                 create_course()
             case "-lc":
@@ -253,21 +303,30 @@ def parse_flags() -> None:
                 delete_task()
             case "-et":
                 edit_task()
+            case "-sd":
+                sort_tasks_by_due_date()
+            case "-sc":
+                sort_tasks_by_course_id()
             case "-fd":
                 due_date = input("Enter due date to filter tasks: ")
                 filter_tasks_by_due_date(due_date)
             case "-fc":
+                courses = load_courses()  # Load once for efficiency
+                course_ids = {course["id"] for course in courses}  # Use a set for fast lookup
+
                 while True:
                     try:
                         course_id = int(input("Enter course ID to filter tasks: "))
-                        if course_id not in [course["id"] for course in load_courses()]:
+                        if course_id not in course_ids:
                             print("Invalid course ID. Please try again.")
                             continue
                     except ValueError:
                         print("Invalid input. Please enter a valid course ID.")
                         continue
                     break
+
                 filter_tasks_by_course(course_id)
+
     else:
         print("Unknown flag. Use -h for help.")
 
