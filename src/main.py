@@ -56,7 +56,7 @@ def create_course() -> None:
     }
     courses.append(new_course)
     save_courses(courses)
-    print("Course created successfully.")
+    print("Course created successfully. The ID is {}".format(new_course["id"]))
 
 
 def list_course() -> None:
@@ -207,6 +207,7 @@ def sort_tasks_by_due_date():
     """
     tasks = load_tasks()
     sorted_tasks = sorted(tasks, key=lambda task: task["due_date"]) # Assumes format is YYYY-MM-DD
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
@@ -220,6 +221,7 @@ def sort_tasks_by_course_id():
     """
     tasks = load_tasks()
     sorted_tasks = sorted(tasks, key=lambda task: task["course_id"])
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
@@ -275,56 +277,42 @@ def parse_flags() -> None:
             -sc  Sort tasks by course ID
             """
             )
-        match flag:
-            case "-h":
-                print(
-                    """
-                Usage: main.py [flag]
-                Flags:
-                -h   Show this help message
-                -cc  Create a new course
-                -lc  List all courses
-                -dc  Delete a course
-                -ec  Edit a course
-                -ct  Create a new task
-                -lt  List all tasks
-                -dt  Delete a task
-                -et  Edit a task
-                -fd  Filter tasks by due date
-                -fc  Filter tasks by course ID
-                """
-                )
-            case "-cc":
-                create_course()
-            case "-lc":
-                list_course()
-            case "-dc":
-                delete_course()
-            case "-ec":
-                edit_course()
-            case "-ct":
-                create_task()
-            case "-lt":
-                list_task()
-            case "-dt":
-                delete_task()
-            case "-et":
-                edit_task()
-            case "-fd":
-                due_date = input("Enter due date to filter tasks: ")
-                filter_tasks_by_due_date(due_date)
-            case "-fc":
-                while True:
-                    try:
-                        course_id = int(input("Enter course ID to filter tasks: "))
-                        if course_id not in [course["id"] for course in load_courses()]:
-                            print("Invalid course ID. Please try again.")
-                            continue
-                    except ValueError:
-                        print("Invalid input. Please enter a valid course ID.")
+        # match flag:
+        if flag == "-cc":
+            create_course()
+        if flag == "-lc":
+            list_course()
+        if flag ==  "-dc":
+            delete_course()
+        if flag == "-ec":
+            edit_course()
+        if flag == "-ct":
+            create_task()
+        if flag == "-lt":
+            list_task()
+        if flag == "-dt":
+            delete_task()
+        if flag =="-et":
+            edit_task()
+        if flag == "-fd":
+            due_date = input("Enter due date to filter tasks: ")
+            filter_tasks_by_due_date(due_date)
+        if flag == "-fc":
+            while True:
+                try:
+                    course_id = int(input("Enter course ID to filter tasks: "))
+                    if course_id not in [course["id"] for course in load_courses()]:
+                        print("Invalid course ID. Please try again.")
                         continue
-                    break
-                filter_tasks_by_course(course_id)
+                except ValueError:
+                    print("Invalid input. Please enter a valid course ID.")
+                    continue
+                break
+            filter_tasks_by_course(course_id)
+        if flag == "-sd":
+            sort_tasks_by_due_date()
+        if flag == "-sc":
+            sort_tasks_by_course_id()
 
     else:
         print("Unknown flag. Use -h for help.")
