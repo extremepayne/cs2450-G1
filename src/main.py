@@ -30,6 +30,7 @@ def save_courses(courses: List[Dict[str, Any]]) -> None:
         json.dump(courses, file, indent=4)
 
 
+# noinspection DuplicatedCode
 def load_tasks() -> List[Dict[str, Any]]:
     try:
         with open(TASK_FILE, "r") as file:
@@ -284,41 +285,47 @@ def parse_flags() -> None:
             """
             )
         # match flag:
-        if flag == "-cc":
-            create_course()
-        if flag == "-lc":
-            list_course()
-        if flag ==  "-dc":
-            delete_course()
-        if flag == "-ec":
-            edit_course()
-        if flag == "-ct":
-            create_task()
-        if flag == "-lt":
-            list_task()
-        if flag == "-dt":
-            delete_task()
-        if flag =="-et":
-            edit_task()
-        if flag == "-fd":
-            due_date = input("Enter due date to filter tasks: ")
-            filter_tasks_by_due_date(due_date)
-        if flag == "-fc":
-            while True:
-                try:
-                    course_id = int(input("Enter course ID to filter tasks: "))
-                    if course_id not in [course["id"] for course in load_courses()]:
-                        print("Invalid course ID. Please try again.")
+
+        match flag:
+            case "-cc":
+                create_course()
+            case "-lc":
+                list_course()
+            case "-dc":
+                delete_course()
+            case "-ec":
+                edit_course()
+            case "-ct":
+                create_task()
+            case "-lt":
+                list_task()
+            case "-dt":
+                delete_task()
+            case "-et":
+                edit_task()
+            case "-sd":
+                sort_tasks_by_due_date()
+            case "-sc":
+                sort_tasks_by_course_id()
+            case "-fd":
+                due_date = input("Enter due date to filter tasks: ")
+                filter_tasks_by_due_date(due_date)
+            case "-fc":
+                courses = load_courses()  # Load once for efficiency
+                course_ids = {course["id"] for course in courses}  # Use a set for fast lookup
+
+                while True:
+                    try:
+                        course_id = int(input("Enter course ID to filter tasks: "))
+                        if course_id not in course_ids:
+                            print("Invalid course ID. Please try again.")
+                            continue
+                    except ValueError:
+                        print("Invalid input. Please enter a valid course ID.")
                         continue
-                except ValueError:
-                    print("Invalid input. Please enter a valid course ID.")
-                    continue
-                break
-            filter_tasks_by_course(course_id)
-        if flag == "-sd":
-            sort_tasks_by_due_date()
-        if flag == "-sc":
-            sort_tasks_by_course_id()
+                    break
+
+                filter_tasks_by_course(course_id)
 
     else:
         print("Unknown flag. Use -h for help.")
