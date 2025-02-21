@@ -1,0 +1,9 @@
+# Milestone 2 Reflection Questions \- Ryker Gibbons
+
+## What I learned about Test-Driven Development
+
+I learned that knowing what you need to test will greatly inform how you implement the code. If I wrote a test first, it meant that I would spend less time doing testing afterwards, because I already knew what I was aiming for. Even just writing a few tests beforehand was very helpful. I also learned that TDD can help me spot potential errors in somebody else’s code, and I can write a test for them or let them write a test to see why the code could be problematic.
+
+## What was the most difficult part of implementing the CLI
+
+This milestone was incredibly difficult for me for 2 big reasons, that being my unfamiliarity with working on the command line, and my lack of experience working in github. I had to spend a lot of time just learning how to navigate the CLI for this project just because it’s not something I’ve really had to do before, and unfortunately it slowed both me and my team down. I didn’t know what commands to type in, and I personally found it difficult to read the displayed text to the terminal upon entering a command. Additionally, I had a lot of learning to do on github this milestone, and I made numerous mistakes with version control in particular, which my team had to fix for me. I needed extensive coaching from both within the group and outside of the group before I felt even somewhat comfortable making commits and pushes, and I still need to learn more about branches. This was all compounded by having to get some major dental work done during this milestone, which led to me not doing as much work as I could have. I believe I’ve learned a lot however, and I feel a little more confident going onwards about my ability to use both the CLI and github (although I still expect I’ll make plenty more mistakes).
