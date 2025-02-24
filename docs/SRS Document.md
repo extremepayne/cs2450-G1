@@ -110,6 +110,12 @@ Minimal task creation should take three clicks/taps or less
 
 - Group coordination (Story 5\)
 
+## UI Requirements
+
+### Color scheme
+
+[https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff](https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff)
+
 ## Sequence Diagram
 
 ![Sequence Diagram](images/Sequence_diagram1.webp)
