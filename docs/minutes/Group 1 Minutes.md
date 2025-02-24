@@ -199,3 +199,79 @@ Kevin Bailey: Make UML Class Diagram
 Chun Poon: Verify tests, report bugs
 
 Curtis Airmet: Finish Use Case Diagram and embed in SRS document. Screenshot ZenHub board and upload to Agile Artifacts Document
+
+## \~ 2/21/25 \~
+
+### Attendance
+
+Curtis Airmet was absent for doctor’s appointment
+
+### Agenda
+
+1. Go over Prof. Ratul’s feedback from Milestone 1  
+
+2. Conduct Milestone 2 review  
+
+3. Go over Milestone 3 deliverables  
+
+4. Make assignments
+
+### Minutes
+
+2:46 Meeting started  
+
+2:46 Read feedback from milestone 1  
+
+2:49 Made notes to update/refactor the SRS document according to format linked by professor  
+
+2:52 Began Milestone 2 review/retrospective  
+
+2:54 Noted division of labor needs to be less lopsided  
+
+2:55 Noted team has good organization/collaboration  
+
+2:56 Noted team should get more work due mid-sprint  
+
+2:58 Noted test files should be more explicit  
+
+3:00 Moved Review/QA tasks to Done in ZenHub  
+
+3:01 Going over Milestone deliverables  
+
+3:03 Noted wireframe or mockup should be done asap for the development team  
+
+3:04 Decided how the GUI Save/Load should function (1 JSON file per user)  
+
+3:07 Noted we have code readability and should keep it up  
+
+3:08 Noted UI testing should include manual instructions for testers  
+
+3:10 Adding wireframe, GUI tasks to ZenHub  
+
+3:13 Assigning members to ZenHub tasks  
+
+3:19 Decided to use PySimpleGUI for GUI wireframe  
+
+3:22 Noted to add print lines to test files to make tests more explicit  
+
+3:24 Starting assigning action items for the week  
+
+3:27 Meeting concluded
+
+### Action Items
+
+Harrison Payne Ryker Gibbons: Make wireframes and update docs to reference wireframe requirements, stories, etc. Hand wireframes off to Kevin and Curtis ASAP.  
+
+Kevin Bailey and Curtis Airmet: Learn PySimpleGUI, Get started with the UI, finish one view.  
+
+Chun Poon: Make the testing files more explicit, enhance Readme file
+
+## \~ 2/28/25 \~
+
+### Attendance
+
+### Agenda
+
+### Minutes
+
+### Action Items

@@ -28,8 +28,8 @@ class TestCourseMethods(unittest.TestCase):
         self.assertEqual(course.name, "Test Course")
         self.assertEqual(course.description, "This is a test course")
         self.assertEqual(course.code, "TC101")
-        self.assertEqual(course.end_date, "2023-06-01")
-        self.assertEqual(course.start_date, "2023-06-30")
+        self.assertEqual(course.start_date, "2023-06-01")
+        self.assertEqual(course.end_date, "2023-06-30")
 
     def test_add_course_to_list(self):
         # Test adding a course to the CourseList

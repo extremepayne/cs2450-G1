@@ -1,0 +1,1 @@
+I was still learning how to use GitHub properly this sprint, but getting familiar with it. I did not write the code for the CLI prototype, but I did however run tests on my computer and write a test report about. I setup breakpoints in the code and have to look at the JSON file that is generated and deleted during test runs to see if anything is wrong in the code.
