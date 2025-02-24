@@ -2,9 +2,9 @@
 This is a task manager for students.
 
 # Features
--Create, read, update and delete tasks
--Sorting tasks by parameters
--Push notifications for deadlines
+    -Create, read, update and delete tasks
+    -Sorting tasks by parameters
+    -Push notifications for deadlines
 
 # Instructions
 \[Software usage instrustions\]
