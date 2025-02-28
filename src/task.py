@@ -31,6 +31,10 @@ class Task:
         self.course_id: int = course_id
         self.status: str = status
 
+    def __str__(self):
+        """Returns human-readable string for print() functions"""
+        return "{" + str(self.task_id) + ", " + self.title + ", " + self.description + ", " + self.due_date + ", " + str(self.course_id) + ", " + self.status + "}"
+
     @staticmethod
     def create_task(
         task_id: int, title: str, description: str, due_date: str, course_id: int

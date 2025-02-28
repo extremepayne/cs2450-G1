@@ -2,7 +2,6 @@
 This is a task manager for students.
 
 # Features
-
 - Create, read, update and delete tasks
 
 - Sorting tasks by parameters
