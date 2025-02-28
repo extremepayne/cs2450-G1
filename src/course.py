@@ -47,6 +47,10 @@ class Course:
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
+    def __str__(self):
+        """Returns human-readable string for print() functions"""
+        return "{" + str(self.id) + ", " + self.name + ", " + self.description + ", " + self.code + ", " + self.start_date + ", " + self.end_date + "}"
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
         return {
@@ -76,6 +80,9 @@ class CourseList:
     def __init__(self):
         """Initialize CourseList and load existing courses from storage."""
         self.courses: List[Course] = self.load_courses()
+
+    def __str__(self):
+        """Returns human-readable string for print() functions"""
 
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """

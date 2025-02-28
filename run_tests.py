@@ -12,4 +12,6 @@ def run_all_tests():
 
 
 if __name__ == "__main__":
+    print("Running test suite via unittest...")
+    print()
     run_all_tests()
