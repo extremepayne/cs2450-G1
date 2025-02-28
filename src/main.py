@@ -312,7 +312,9 @@ def parse_flags() -> None:
                 filter_tasks_by_due_date(due_date)
             case "-fc":
                 courses = load_courses()  # Load once for efficiency
-                course_ids = {course["id"] for course in courses}  # Use a set for fast lookup
+                course_ids = {
+                    course["id"] for course in courses
+                }  # Use a set for fast lookup
 
                 while True:
                     try:
