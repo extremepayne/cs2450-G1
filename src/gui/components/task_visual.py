@@ -51,7 +51,7 @@ class TaskItem(tk.Frame):
             file=os.path.join(assets_dir, "edit.png")
         )  # Use an actual image file
         edit_button = tk.Button(
-            self, image=edit_icon, command=lambda: edit_callback(task_name)
+            self, image=edit_icon, command=lambda: edit_callback(self, task_name)
         )
         edit_button.image = edit_icon  # Keep reference
         edit_button.grid(row=0, column=3, padx=5)
@@ -61,7 +61,7 @@ class TaskItem(tk.Frame):
             file=os.path.join(assets_dir, "trash.png")
         )  # Use an actual image file
         delete_button = tk.Button(
-            self, image=delete_icon, command=lambda: delete_callback(task_name)
+            self, image=delete_icon, command=lambda: delete_callback(self, task_name)
         )
         delete_button.image = delete_icon
         delete_button.grid(row=0, column=4, padx=5)
@@ -114,11 +114,25 @@ class TaskManagerApp(tk.Tk):
     def _on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-    def delete_task(self, task_name):
-        print(f"Deleting: {task_name}")
+    def edit_task(self, task, s):
+        print(f"Editing: {task.task_name}")
 
-    def edit_task(self, task_name):
-        print(f"Editing: {task_name}")
+    # Asks the user if they want to delete a task, then deletes it if they say yes
+    def delete_task(self, task, task_name):
+        temp_frame = tk.Frame(self)
+        temp_label = tk.Label(
+            temp_frame, text=f'Are you sure you want to delete "{task_name}"?'
+        )
+        temp_yes = tk.Button(
+            temp_frame,
+            text="Yes",
+            command=lambda: {task.destroy(), temp_frame.destroy()},
+        )
+        temp_no = tk.Button(temp_frame, text="No", command=lambda: temp_frame.destroy())
+        temp_frame.pack()
+        temp_label.pack()
+        temp_yes.pack()
+        temp_no.pack()
 
 
 if __name__ == "__main__":
