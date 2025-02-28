@@ -8,7 +8,6 @@ This is a task manager for students.
 
 - Push notifications for deadlines
 
-
 # Instructions
 \[Software usage instrustions\]
 # Artifacts
