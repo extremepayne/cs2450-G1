@@ -272,6 +272,44 @@ Chun Poon: Make the testing files more explicit, enhance Readme file
 
 ### Agenda
 
+1. Review and critique UI design  
+
+2. Review Chun PR  
+
+3. Review Milestone 3 deliverables  
+
+4. Move ZenHub items according to work completed  
+
+5. Assign new action items for the week
+
 ### Minutes
 
+2:40 Meeting started  
+
+2:46 Begin reviewing GUI design  
+
+2:50 Noted the need for more essential buttons (Save buttons)  
+
+2:53 Assigned Ryker to finish the UI design; Assigned Harrison to integrate UI into docs  
+
+2:55 Reviewing test function, made notes to utilize verbosing  
+
+2:59 Continue reviewing deliverables of Milestone 3  
+
+3:01 Assigned Chun to update and integrate GUI elements into the Sequence Diagram  
+
+3:05 Continue assigning action items  
+
+3:07 Meeting concluded
+
 ### Action Items
+
+Ryker Gibbons: Finish UI design  
+
+Harrison Payne: Integrate UI design into docs, revise SRS document  
+
+Chun Poon: Sequence Diagram w/ updated GUI elements; finish README updates and test updates  
+
+Kevin Bailey: Finish GUI integration; write tests; UML Class Diagram  
+
+Curtis Airmet: Finish GUI integration; write tests
