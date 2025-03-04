@@ -32,7 +32,18 @@ class AddTaskView(tk.Toplevel):
         header_label = tk.Label(
             header_bar, text="Add New Task", bg="#B6EEFB", font=("Arial", 14, "bold")
         )
-        header_label.pack(expand=True, pady=10)
+        header_label.pack(side=tk.LEFT, expand=True, pady=10)
+
+        # Add close button
+        close_button = tk.Button(
+            header_bar,
+            text="✕",
+            bg="#B6EEFB",
+            font=("Arial", 12),
+            relief="flat",
+            command=self.destroy,
+        )
+        close_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Task name
         tk.Label(main_container, text="Task Name:").grid(
