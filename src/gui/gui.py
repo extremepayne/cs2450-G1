@@ -2,6 +2,9 @@ import tkinter as tk
 from components.custom_button import CustomButton
 from components.task_visual import TaskItem
 from components.filter_menu import MenuWindow
+from components.edit_task_view import EditTaskView
+from components.add_task_view import AddTaskView
+from components.add_course_view import AddCourseView
 import os
 
 # Create the main window
@@ -35,18 +38,32 @@ def toggle_filter_menu():
         filter_menu.pack(after=nav_bar, fill="x")
 
 
-# #function to open the task filterer
-# def show_filter_menu():
-#     def apply_filters(course, due_date):
-#         print(f"Filtering by course: {course} and date: {due_date}")
-#         # Add your filtering logic here
+def edit_task(task_id):
+    def save_changes(task_data):
+        print(f"Saving changes for task {task_id}: {task_data}")
+        # Implement other saving logic here
 
-#     filter_window = MenuWindow(root, apply_filters)
-#     filter_window.grab_set()  # Make window modal
+    edit_window = EditTaskView(root, task_id=task_id, save_callback=save_changes)
+    edit_window.grab_set()  # Make window modal
 
-# #clickable hamburger menu icon
-# # Get the absolute path to the assets directory
-# assets_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
+
+def add_new_task():
+    def save_new_task(task_data):
+        print(f"Adding new task: {task_data}")
+        # Implement task creation logic here
+
+    add_window = AddTaskView(root, save_callback=save_new_task)
+    add_window.grab_set()  # Make window modal
+
+
+def add_new_course():
+    def save_new_course(course_data):
+        print(f"Adding new course: {course_data}")
+        # Implement course creation logic here
+
+    add_window = AddCourseView(root, save_callback=save_new_course)
+    add_window.grab_set()  # Make window modal
+
 
 # Menu Button with icon
 try:
@@ -66,6 +83,14 @@ except Exception as e:
     menu_button = CustomButton(nav_bar, text="Filter", command=toggle_filter_menu)
     menu_button.pack(side=tk.LEFT, padx=10, pady=10)
 
+# Add Task Button
+add_task_button = CustomButton(nav_bar, text="+ Add Task", command=add_new_task)
+add_task_button.pack(side=tk.RIGHT, padx=10, pady=10)
+
+# Add Course Button - place it next to Add Task
+add_course_button = CustomButton(nav_bar, text="+ Add Course", command=add_new_course)
+add_course_button.pack(side=tk.RIGHT, padx=10, pady=10)
+
 # Create a container for tasks below the nav bar
 task_container = tk.Frame(root, bg="#FFFFFF")
 task_container.pack(fill="both", expand=True, padx=20, pady=20)
@@ -82,18 +107,12 @@ def delete_task(task_name):
     print(f"Delete task: {task_name}")
 
 
-def edit_task(task_name):
-    print(f"Edit task: {task_name}")
-
-
 # Create task items
 for task in sample_tasks:
     task_item = TaskItem(
         task_container, *task, delete_callback=delete_task, edit_callback=edit_task
     )
     task_item.pack(fill="x", padx=5, pady=5)
-
-# ...existing code...
 
 # Run the application
 root.mainloop()
