@@ -14,21 +14,34 @@ class TaskItem(tk.Frame):
         delete_callback,
         edit_callback,
     ):
-        super().__init__(parent, bd=1, relief="solid", padx=10, pady=5)
+        super().__init__(
+            parent, bd=0, relief="flat", bg="#FFFFFF", padx=10, pady=5
+        )  # Removed border, kept padding
 
-        # Task Name & Description
-        task_label = tk.Label(self, text=task_name, font=("Arial", 12, "bold"))
+        # Configure column weights to push items to the right
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=0)
+        self.grid_columnconfigure(2, weight=0)
+        self.grid_columnconfigure(3, weight=0)
+        self.grid_columnconfigure(4, weight=0)
+
+        # Task Name & Description (left-aligned) with white background
+        task_label = tk.Label(
+            self, text=task_name, font=("Arial", 12, "bold"), bg="#FFFFFF"
+        )
         task_label.grid(row=0, column=0, sticky="w", padx=(5, 10))
 
-        desc_label = tk.Label(self, text=description, font=("Arial", 10))
+        desc_label = tk.Label(self, text=description, font=("Arial", 10), bg="#FFFFFF")
         desc_label.grid(row=1, column=0, sticky="w", padx=(5, 10))
 
-        # Course & Due Date
-        course_label = tk.Label(self, text=course, font=("Arial", 10))
-        course_label.grid(row=0, column=1, padx=10)
+        # Course & Due Date (right-aligned) with white background
+        course_label = tk.Label(self, text=course, font=("Arial", 10), bg="#FFFFFF")
+        course_label.grid(row=0, column=1, padx=10, sticky="e")
 
-        due_label = tk.Label(self, text=f"Due: {due_date}", font=("Arial", 10))
-        due_label.grid(row=0, column=2, padx=10)
+        due_label = tk.Label(
+            self, text=f"Due: {due_date}", font=("Arial", 10), bg="#FFFFFF"
+        )
+        due_label.grid(row=0, column=2, padx=10, sticky="e")
 
         # Get the absolute path to the assets directory
         assets_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
