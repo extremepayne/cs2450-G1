@@ -7,7 +7,14 @@ from components.edit_task_view import EditTaskView
 from components.add_task_view import AddTaskView
 from components.add_course_view import AddCourseView
 import os
+import sys
 from datetime import datetime, timedelta
+
+# Add the src directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from course import Course, CourseList  # Now using absolute import
+from task import Task  # Now using absolute import
 
 # Create the main window
 root = tk.Tk()
@@ -30,57 +37,128 @@ def resize_image(image_path, width, height):
 
 class TaskManagerGUI:
     def __init__(self):
-        self.all_tasks = []  # Store all tasks
+        self.course_list = CourseList()
+        self.all_tasks = Task.load_tasks()  # Load existing tasks from JSON
         self.task_container = None
+        self.filter_menu = None
+        self.next_task_id = len(self.all_tasks) + 1  # Set next ID based on existing tasks
         self.setup_gui()
 
-    def delete_task(self, task_name):
-        """Delete a task after confirmation"""
-        if messagebox.askyesno(
-            "Confirm Delete", f"Are you sure you want to delete '{task_name}'?"
-        ):
-            print(f"Deleting task: {task_name}")
-            # Remove from all_tasks list
-            self.all_tasks = [task for task in self.all_tasks if task[0] != task_name]
-            # Here you would add the database deletion logic
-            # Example: database_manager.delete_task(task_name)
-            return True
-        return False
+    def save_tasks(self):
+        self.course_list.save_courses()
+
+    def add_new_course(self):
+        def save_new_course(course_data):
+            try:
+                # Generate a new course ID (simple increment for now)
+                new_id = len(self.course_list.courses) + 1
+                
+                # Create new Course instance
+                new_course = Course(
+                    id=new_id,
+                    name=course_data["name"],
+                    description=course_data["description"],
+                    code=course_data["code"],
+                    start_date=course_data["start_date"],
+                    end_date=course_data["end_date"]
+                )
+                
+                # Add to CourseList
+                self.course_list.add_course(new_course)
+                messagebox.showinfo("Success", f"Course {course_data['name']} added successfully!")
+                
+                # Update the filter menu course list
+                self.update_course_filters()
+                
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
+
+        add_window = AddCourseView(root, save_callback=save_new_course)
+        add_window.grab_set()
+
+    def update_course_filters(self):
+        """Update the course filter dropdown with current courses"""
+        course_codes = ["All Courses"] + [course.code for course in self.course_list.courses]
+        # Update filter menu courses - assuming filter_menu is accessible
+        self.filter_menu.update_courses(course_codes)
+
+    def add_new_task(self):
+        """Add a new task and display it in the task container"""
+        def save_new_task(task_data):
+            try:
+                # Create new Task instance
+                new_task = Task(
+                    task_id=self.next_task_id,
+                    title=task_data["name"],
+                    description=task_data["description"],
+                    due_date=task_data["due_date"],
+                    course_id=1,  # TODO: Get actual course ID
+                    status=task_data["status"]
+                )
+                
+                # Add to tasks list and update next_task_id
+                self.all_tasks.append(new_task)
+                self.next_task_id += 1
+
+                # Save tasks to JSON
+                Task.save_tasks(self.all_tasks)
+
+                # Create and display new task item in UI
+                task_item = TaskItem(
+                    self.task_container,
+                    new_task.title,
+                    new_task.description,
+                    task_data["course"],  # Use selected course
+                    new_task.due_date,
+                    delete_callback=self.delete_task,
+                    edit_callback=self.edit_task
+                )
+                task_item.pack(fill="x", padx=5, pady=5)
+                
+                messagebox.showinfo("Success", f"Task '{task_data['name']}' added successfully!")
+                
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
+
+        add_window = AddTaskView(root, save_callback=save_new_task)
+        add_window.grab_set()
+
+    def apply_filters(self, course):
+        """Apply filters to tasks and update display"""
+        # Clear current tasks
+        for widget in self.task_container.winfo_children():
+            widget.destroy()
+        
+        # Filter tasks
+        filtered_tasks = [task for task in self.all_tasks if course == "All Courses" or task[2] == course]
+        
+        # Display filtered tasks
+        for task in filtered_tasks:
+            task_item = TaskItem(
+                self.task_container,
+                task[0], task[1], task[2], task[3],
+                delete_callback=self.delete_task,
+                edit_callback=self.edit_task
+            )
+            task_item.pack(fill="x", padx=5, pady=5)
 
     def setup_gui(self):
-        filter_menu = MenuWindow(root, self.apply_filters)
-
+        # Create filter menu with reference to self
+        self.filter_menu = MenuWindow(root, self.apply_filters)
+        
         def toggle_filter_menu():
-            if filter_menu.winfo_ismapped():
-                filter_menu.pack_forget()
+            if self.filter_menu.winfo_ismapped():
+                self.filter_menu.pack_forget()
             else:
-                filter_menu.pack(after=nav_bar, fill="x")
+                self.filter_menu.pack(after=nav_bar, fill="x")
 
         def edit_task(task_id):
             def save_changes(task_data):
                 print(f"Saving changes for task {task_id}: {task_data}")
                 # Implement other saving logic here
 
-            edit_window = EditTaskView(
-                root, task_id=task_id, save_callback=save_changes
-            )
+            edit_window = EditTaskView(root, task_id=task_id, save_callback=save_changes)
             edit_window.grab_set()  # Make window modal
-
-        def add_new_task():
-            def save_new_task(task_data):
-                print(f"Adding new task: {task_data}")
-                # Implement task creation logic here
-
-            add_window = AddTaskView(root, save_callback=save_new_task)
-            add_window.grab_set()  # Make window modal
-
-        def add_new_course():
-            def save_new_course(course_data):
-                print(f"Adding new course: {course_data}")
-                # Implement course creation logic here
-
-            add_window = AddCourseView(root, save_callback=save_new_course)
-            add_window.grab_set()  # Make window modal
 
         # Menu Button with icon
         try:
@@ -97,72 +175,42 @@ class TaskManagerGUI:
             menu_button.pack(side=tk.LEFT, padx=10, pady=10)
         except Exception as e:
             # Fallback to text button if image fails to load
-            menu_button = CustomButton(
-                nav_bar, text="Filter", command=toggle_filter_menu
-            )
+            menu_button = CustomButton(nav_bar, text="Filter", command=toggle_filter_menu)
             menu_button.pack(side=tk.LEFT, padx=10, pady=10)
 
-        # Add Task Button
-        add_task_button = CustomButton(nav_bar, text="+ Add Task", command=add_new_task)
+        # Add Task Button (now using the class method)
+        add_task_button = CustomButton(nav_bar, text="+ Add Task", command=self.add_new_task)
         add_task_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Add Course Button - place it next to Add Task
-        add_course_button = CustomButton(
-            nav_bar, text="+ Add Course", command=add_new_course
-        )
+        add_course_button = CustomButton(nav_bar, text="+ Add Course", command=self.add_new_course)
         add_course_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Create a container for tasks below the nav bar
-        self.task_container = tk.Frame(root, bg="#E6E6E6")  # Changed to light gray
+        self.task_container = tk.Frame(root, bg="#E6E6E6")
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
 
-        # Sample tasks for testing
-        self.all_tasks = [
-            ("Assignment 1", "Complete chapter 1-3", "CS 2450", "2025-03-01"),
-            ("Project Milestone", "Submit phase 1", "CS 3060", "2025-03-15"),
-            ("Quiz Prep", "Study for quiz 2", "CS 2420", "2025-03-10"),
-        ]
-
-        # Create task items
+        # Display existing tasks if any
         for task in self.all_tasks:
             task_item = TaskItem(
                 self.task_container,
-                *task,
+                task.title,
+                task.description,
+                "CS 2450",  # TODO: Get actual course code
+                task.due_date,
                 delete_callback=self.delete_task,
-                edit_callback=edit_task,
-            )
-            task_item.pack(fill="x", padx=5, pady=5)
-
-    def apply_filters(self, course, date_filter):
-        """Filter tasks based on course and date criteria"""
-        # Clear current tasks
-        for widget in self.task_container.winfo_children():
-            widget.destroy()
-
-        # Filter tasks
-        filtered_tasks = self.filter_tasks(course, date_filter)
-
-        # Display filtered tasks
-        for task in filtered_tasks:
-            task_item = TaskItem(
-                self.task_container,
-                task[0],
-                task[1],
-                task[2],
-                task[3],
-                delete_callback=self.delete_task,
-                edit_callback=self.edit_task,
+                edit_callback=self.edit_task
             )
             task_item.pack(fill="x", padx=5, pady=5)
 
     def filter_tasks(self, course, date_filter):
         """Filter tasks based on criteria"""
         filtered = self.all_tasks.copy()
-
+        
         # Filter by course
         if course != "All Courses":
             filtered = [task for task in filtered if task[2] == course]
-
+        
         # Filter by date
         if date_filter != "All":
             today = datetime.now()
@@ -170,13 +218,12 @@ class TaskManagerGUI:
                 end_date = today + timedelta(days=7)
             elif date_filter == "Month":
                 end_date = today + timedelta(days=30)
-
+            
             filtered = [
-                task
-                for task in filtered
+                task for task in filtered 
                 if self.is_date_in_range(task[3], today, end_date)
             ]
-
+        
         return filtered
 
     def is_date_in_range(self, date_str, start_date, end_date):
@@ -187,6 +234,66 @@ class TaskManagerGUI:
         except ValueError:
             return False
 
+    def delete_task(self, task_name):
+        """Delete a task after confirmation"""
+        if messagebox.askyesno("Confirm Delete", f"Are you sure you want to delete '{task_name}'?"):
+            # Find and remove the task from all_tasks list
+            self.all_tasks = [task for task in self.all_tasks if task.title != task_name]
+            # Save updated task list to JSON
+            Task.save_tasks(self.all_tasks)
+            return True  # Return True to trigger widget destruction
+        return False
+
+    def edit_task(self, task_name):
+        """Edit an existing task"""
+        # Find the task to edit
+        task_to_edit = next((task for task in self.all_tasks if task.title == task_name), None)
+        if not task_to_edit:
+            return
+
+        def save_changes(task_data):
+            # Update task attributes
+            task_to_edit.title = task_data["name"]
+            task_to_edit.description = task_data["description"]
+            task_to_edit.due_date = task_data["due_date"]
+            task_to_edit.status = task_data["status"]
+            
+            # Save to JSON
+            Task.save_tasks(self.all_tasks)
+            
+            # Refresh the task display
+            for widget in self.task_container.winfo_children():
+                widget.destroy()
+            
+            # Redisplay all tasks
+            for task in self.all_tasks:
+                task_item = TaskItem(
+                    self.task_container,
+                    task.title,
+                    task.description,
+                    task_data["course"],  # Use selected course
+                    task.due_date,
+                    delete_callback=self.delete_task,
+                    edit_callback=self.edit_task
+                )
+                task_item.pack(fill="x", padx=5, pady=5)
+            
+            messagebox.showinfo("Success", "Task updated successfully!")
+
+        # Open edit window with current task data
+        edit_window = EditTaskView(
+            root, 
+            task_id=task_to_edit.task_id,
+            task_data={
+                "name": task_to_edit.title,
+                "description": task_to_edit.description,
+                "due_date": task_to_edit.due_date,
+                "status": task_to_edit.status,
+                "course": "CS 2450"  # TODO: Get actual course
+            },
+            save_callback=save_changes
+        )
+        edit_window.grab_set()
 
 # Run the application
 TaskManagerGUI()

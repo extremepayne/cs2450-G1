@@ -45,3 +45,9 @@ class MenuWindow(tk.Frame):
     def clear_filter(self):
         self.course_var.set("All Courses")
         self.apply_filters()
+
+    def update_courses(self, course_list):
+        """Update the course dropdown with new course list"""
+        self.course_dropdown['values'] = course_list
+        if "All Courses" not in self.course_var.get():
+            self.course_var.set("All Courses")

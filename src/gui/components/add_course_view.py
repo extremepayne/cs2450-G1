@@ -35,17 +35,16 @@ class AddCourseView(tk.Toplevel):
         header_label.pack(side=tk.LEFT, expand=True, pady=10)
 
         # Add close button
-        close_button = tk.Button(
-            header_bar,
-            text="✕",
-            bg="#B6EEFB",
-            font=("Arial", 12),
-            relief="flat",
-            command=self.destroy,
-        )
+        close_button = tk.Button(header_bar, text="✕", bg="#B6EEFB", font=("Arial", 12),
+                               relief="flat", command=self.destroy)
         close_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Course name
+        tk.Label(main_container, text="Course Name:").grid(
+            row=1, column=0, padx=5, pady=5, sticky="e"
+        )
+        self.name_entry = tk.Entry(main_container, width=40)
+        self.name_entry.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
         # Course code
         tk.Label(main_container, text="Course Code:").grid(
