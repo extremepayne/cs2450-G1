@@ -72,7 +72,9 @@ You can see these use cases presented visually in the UML diagram below:
 
 ![Use case diagram](images/Use_case_diagram.webp)
 
-## Functional Requirements
+## Requirements
+
+### Functional Requirements
 
 Sort tasks by classes
 
@@ -90,13 +92,43 @@ CRUD Classes
 
 CRUD Tasks
 
-## Nonfunctional Requirements
+### Nonfunctional Requirements
 
 Creating or updating a task should save within 500ms
 
 Deleting a task should be persistent (users should never see “ghost tasks”)
 
 Minimal task creation should take three clicks/taps or less
+
+## UI Requirements
+
+### Color scheme
+
+[https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff](https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff)
+
+### Mock-ups
+
+#### Overall diagram
+
+![wireframe 1](images/wireframes/todolistapp-wireframe-1.webp)
+
+#### Course sort view
+
+![wireframe 2](images/wireframes/todolistapp-wireframe-course-sort.webp)
+
+#### Due date sort view
+
+(default)
+
+![wireframe 3](images/wireframes/todolistapp-wireframe-due-date-sort.webp)
+
+#### Filtering UI
+
+![wireframe 4](images/wireframes/todolistapp-wireframe-filter.webp)
+
+#### Addtl. notes
+
+![wireframe 5](images/wireframes/todolistapp-wireframe-notes.webp)
 
 ## Future Enhancements
 
@@ -110,17 +142,13 @@ Minimal task creation should take three clicks/taps or less
 
 - Group coordination (Story 5\)
 
-## UI Requirements
+## Diagrams
 
-### Color scheme
-
-[https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff](https://coolors.co/1a1a1a-e6e6e6-808080-12cdd4-b6eefb-ffffff)
-
-## Sequence Diagram
+### Sequence Diagram
 
 ![Sequence Diagram](images/Sequence_diagram1.webp)
 
-## UML Class Diagram
+### UML Class Diagram
 
 ![Class Diagram](images/UML_classs_diagram.webp)
 
