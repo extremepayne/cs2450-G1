@@ -114,7 +114,7 @@ Minimal task creation should take three clicks/taps or less
 
 #### Course sort view
 
-![wireframe 2](images/wireframes/todolistapp-wireframe-course-sort.webp)
+![wireframe 2](images/wireframes/todolistapp-wireframe-course-sort.jpg)
 
 #### Due date sort view
 
