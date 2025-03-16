@@ -110,7 +110,7 @@ Minimal task creation should take three clicks/taps or less
 
 #### Overall diagram
 
-![wireframe 1](images/wireframes/todolistapp-wireframe-1.webp)
+![wireframe 1](images/wireframes/todolistapp-wireframe-1.jpg)
 
 #### Course sort view
 
