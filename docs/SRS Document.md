@@ -130,6 +130,10 @@ Minimal task creation should take three clicks/taps or less
 
 ![wireframe 6](images/wireframes/todolistapp-wireframe-add-edit.jpg)
 
+#### Course deletion popup
+
+![wireframe 6](images/wireframes/todolistapp-wireframe-delete-course.jpg)
+
 #### Addtl. notes
 
 ![wireframe 5](images/wireframes/todolistapp-wireframe-notes.webp)
