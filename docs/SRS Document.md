@@ -120,7 +120,7 @@ Minimal task creation should take three clicks/taps or less
 
 (default)
 
-![wireframe 3](images/wireframes/todolistapp-wireframe-due-date-sort.webp)
+![wireframe 3](images/wireframes/todolistapp-wireframe-due-date-sort.jpg)
 
 #### Filtering UI
 
