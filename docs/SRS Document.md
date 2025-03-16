@@ -126,6 +126,10 @@ Minimal task creation should take three clicks/taps or less
 
 ![wireframe 4](images/wireframes/todolistapp-wireframe-filter.webp)
 
+#### Adding and editing UI
+
+![wireframe 6](images/wireframes/todolistapp-wireframe-add-edit.jpg)
+
 #### Addtl. notes
 
 ![wireframe 5](images/wireframes/todolistapp-wireframe-notes.webp)
