@@ -51,6 +51,8 @@ class TestCourseMethods(unittest.TestCase):
         course_list.add_course(course)
         self.assertIn(course, course_list.courses, "ERROR: Course is not found in list")
         print(course_list.courses[0].name)
+        print("CourseList created:", end =" ")
+        print(course_list)
         self.assertEqual(len(course_list.courses), 1, "ERROR: Expected to have only 1 Course object, but got " + str(len(course_list.courses)) + " instead")
         print("Course added successfully to list")
         print()

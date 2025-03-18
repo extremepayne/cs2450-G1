@@ -83,7 +83,13 @@ class CourseList:
 
     def __str__(self):
         """Returns human-readable string for print() functions"""
-
+        string: str = "["
+        for course in self.courses:
+            string = string + str(course) + ", "
+        string = string[:-2]
+        string += "]"
+        return string
+        
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """
         Create a Course instance from a dictionary.
