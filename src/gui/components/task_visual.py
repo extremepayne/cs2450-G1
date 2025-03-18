@@ -4,67 +4,53 @@ import os
 
 
 class TaskItem(tk.Frame):
-    def __init__(
-        self,
-        parent,
-        task_name,
-        description,
-        course,
-        due_date,
-        delete_callback,
-        edit_callback,
-    ):
-        super().__init__(
-            parent, bd=0, relief="flat", bg="#FFFFFF", padx=10, pady=5
-        )  # Removed border, kept padding
+    def __init__(self, parent, task_name, description, course, due_date, delete_callback, edit_callback):
+        super().__init__(parent, bd=0, relief="flat", bg="#FFFFFF", padx=10, pady=5)
 
         # Configure column weights to push items to the right
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=0)
-        self.grid_columnconfigure(2, weight=0)
-        self.grid_columnconfigure(3, weight=0)
-        self.grid_columnconfigure(4, weight=0)
+        self.grid_columnconfigure(0, weight=1)  # Task name/description column expands
+        self.grid_columnconfigure(1, weight=0)  # Course code stays fixed
+        self.grid_columnconfigure(2, weight=0)  # Due date stays fixed
+        self.grid_columnconfigure(3, weight=0)  # Edit button stays fixed
+        self.grid_columnconfigure(4, weight=0)  # Delete button stays fixed
 
-        # Task Name & Description (left-aligned) with white background
-        task_label = tk.Label(
-            self, text=task_name, font=("Arial", 12, "bold"), bg="#FFFFFF"
-        )
+        # Task Name & Description (left-aligned)
+        task_label = tk.Label(self, text=task_name, font=("Arial", 12, "bold"), bg="#FFFFFF")
         task_label.grid(row=0, column=0, sticky="w", padx=(5, 10))
 
         desc_label = tk.Label(self, text=description, font=("Arial", 10), bg="#FFFFFF")
         desc_label.grid(row=1, column=0, sticky="w", padx=(5, 10))
 
-        # Course & Due Date (right-aligned) with white background
+        # Course & Due Date (right-aligned)
         course_label = tk.Label(self, text=course, font=("Arial", 10), bg="#FFFFFF")
         course_label.grid(row=0, column=1, padx=10, sticky="e")
 
-        due_label = tk.Label(
-            self, text=f"Due: {due_date}", font=("Arial", 10), bg="#FFFFFF"
-        )
+        due_label = tk.Label(self, text=f"Due: {due_date}", font=("Arial", 10), bg="#FFFFFF")
         due_label.grid(row=0, column=2, padx=10, sticky="e")
 
         # Get the absolute path to the assets directory
         assets_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
 
-        # Edit Button
-        edit_icon = tk.PhotoImage(
-            file=os.path.join(assets_dir, "edit.png")
-        )  # Use an actual image file
-        edit_button = tk.Button(
-            self, image=edit_icon, command=lambda: edit_callback(task_name)
-        )
+        # Edit Button (right-aligned)
+        edit_icon = tk.PhotoImage(file=os.path.join(assets_dir, "edit.png"))
+        edit_button = tk.Button(self, image=edit_icon, command=lambda: edit_callback(task_name))
         edit_button.image = edit_icon  # Keep reference
-        edit_button.grid(row=0, column=3, padx=5)
+        edit_button.grid(row=0, column=3, padx=5, sticky="e")
 
-        # Delete Button
-        delete_icon = tk.PhotoImage(
-            file=os.path.join(assets_dir, "trash.png")
-        )  # Use an actual image file
-        delete_button = tk.Button(
-            self, image=delete_icon, command=lambda: delete_callback(task_name)
-        )
+        # Store task name and callbacks
+        self.task_name = task_name
+        self.delete_callback = delete_callback
+
+        # Delete Button (right-aligned)
+        delete_icon = tk.PhotoImage(file=os.path.join(assets_dir, "trash.png"))
+        delete_button = tk.Button(self, image=delete_icon, command=self.delete_self)
         delete_button.image = delete_icon
-        delete_button.grid(row=0, column=4, padx=5)
+        delete_button.grid(row=0, column=4, padx=5, sticky="e")
+
+    def delete_self(self):
+        """Handle task deletion"""
+        if self.delete_callback(self.task_name):
+            self.destroy()  # Remove the widget from view if deletion was confirmed
 
 
 class TaskManagerApp(tk.Tk):
