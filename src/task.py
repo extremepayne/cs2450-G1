@@ -1,7 +1,5 @@
-import json
-from typing import List, Dict, Any
+from typing import List, Dict
 
-TASK_FILE = "tasks.json"
 
 class Task:
     """A class representing a task associated with a course."""
@@ -120,50 +118,3 @@ class Task:
             List[Task]: Updated list of tasks with specified task removed
         """
         return [task for task in tasks_list if task.task_id != task_id]
-
-    @classmethod
-    def load_tasks(cls) -> List["Task"]:
-        """Load tasks from JSON file"""
-        try:
-            with open(TASK_FILE, "r") as file:
-                tasks_data = json.load(file)
-                return [cls(
-                    task_id=task["task_id"],
-                    title=task["title"],
-                    description=task["description"],
-                    due_date=task["due_date"],
-                    course_id=task["course_id"],
-                    status=task["status"]
-                ) for task in tasks_data]
-        except FileNotFoundError:
-            return []
-
-    @staticmethod
-    def save_tasks(tasks: List["Task"]) -> None:
-        """Save tasks to JSON file"""
-        tasks_data = [task.get_task_details() for task in tasks]
-        with open(TASK_FILE, "w") as file:
-            json.dump(tasks_data, file, indent=4)
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert task to dictionary format"""
-        return {
-            "task_id": self.task_id,
-            "title": self.title,
-            "description": self.description,
-            "due_date": self.due_date,
-            "course_id": self.course_id,
-            "status": self.status
-        }
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Task":
-        """Create Task instance from dictionary"""
-        return cls(
-            task_id=data["task_id"],
-            title=data["title"],
-            description=data["description"],
-            due_date=data["due_date"],
-            course_id=data["course_id"],
-            status=data["status"]
-        )

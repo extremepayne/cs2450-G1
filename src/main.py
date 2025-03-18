@@ -1,7 +1,6 @@
 import sys
 import json
 from typing import List, Dict, Any
-from task import Task
 
 # No "menu" setup, we will run this CLI app by the flags we set
 # -h, help
@@ -31,6 +30,20 @@ def save_courses(courses: List[Dict[str, Any]]) -> None:
         json.dump(courses, file, indent=4)
 
 
+# noinspection DuplicatedCode
+def load_tasks() -> List[Dict[str, Any]]:
+    try:
+        with open(TASK_FILE, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+
+def save_tasks(tasks: List[Dict[str, Any]]) -> None:
+    with open(TASK_FILE, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+
 def create_course() -> None:
     courses = load_courses()
     new_course = {
@@ -55,13 +68,13 @@ def list_course() -> None:
 
 def delete_course() -> None:
     courses = load_courses()
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     course_id = int(
         input("Enter course ID to delete: ")
     )  # Need to account for trying to delete an invalid course
     tasks = [task for task in tasks if task["course_id"] != course_id]
     courses = [course for course in courses if course["id"] != course_id]
-    Task.save_tasks(tasks)
+    save_tasks(tasks)
     save_courses(courses)
     print("Course and associated tasks deleted successfully.")
 
@@ -92,7 +105,7 @@ def edit_course() -> None:
 
 
 def create_task() -> None:
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     courses = load_courses()
     course_ids = [course["id"] for course in courses]
 
@@ -108,21 +121,22 @@ def create_task() -> None:
             continue
         break
 
-    new_task = Task(
-        task_id=len(tasks) + 1,
-        title=input("Enter task title: "),
-        description=input("Enter task description: "),
-        due_date=input("Enter due date: "),
-        course_id=course_id,
-        status="pending"
-    )
+    new_task = {
+        # Need to account for a user entering in data in an incorrect format
+        "task_id": len(tasks) + 1,
+        "title": input("Enter task title: "),
+        "description": input("Enter task description: "),
+        "due_date": input("Enter due date: "),
+        "course_id": course_id,
+        "status": "pending",
+    }
     tasks.append(new_task)
-    Task.save_tasks(tasks)
+    save_tasks(tasks)
     print("Task created successfully.")
 
 
 def list_task() -> None:
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     for task in tasks:
         print(
             f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
@@ -130,7 +144,7 @@ def list_task() -> None:
 
 
 def delete_task() -> None:
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     # while loop to validate task_id input
     while True:
         try:
@@ -143,12 +157,12 @@ def delete_task() -> None:
             continue
         break
     tasks = [task for task in tasks if task["task_id"] != task_id]
-    Task.save_tasks(tasks)
+    save_tasks(tasks)
     print("Task deleted successfully.")
 
 
 def edit_task() -> None:
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     # while loop to validate task_id input
     while True:
         try:
@@ -163,31 +177,31 @@ def edit_task() -> None:
     for task in tasks:
         if task["task_id"] == task_id:
             # Again, introducing an option to keep certain details the same could be nice
-            task.title = input("Enter new task title: ")
-            task.description = input("Enter new task description: ")
-            task.due_date = input("Enter new due date: ")
-            task.course_id = int(input("Enter new course ID: "))
-            task.status = input("Enter new status: ")
+            task["title"] = input("Enter new task title: ")
+            task["description"] = input("Enter new task description: ")
+            task["due_date"] = input("Enter new due date: ")
+            task["course_id"] = int(input("Enter new course ID: "))
+            task["status"] = input("Enter new status: ")
             break
-    Task.save_tasks(tasks)
+    save_tasks(tasks)
     print("Task edited successfully.")
 
 
 def filter_tasks_by_due_date(due_date: str) -> None:
-    tasks = Task.load_tasks()
-    filtered_tasks = [task for task in tasks if task.due_date == due_date]
+    tasks = load_tasks()
+    filtered_tasks = [task for task in tasks if task["due_date"] == due_date]
     for task in filtered_tasks:
         print(
-            f"ID: {task.task_id}, Title: {task.title}, Due Date: {task.due_date}, Status: {task.status}"
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
 
 
 def filter_tasks_by_course(course_id: int) -> None:
-    tasks = Task.load_tasks()
-    filtered_tasks = [task for task in tasks if task.course_id == course_id]
+    tasks = load_tasks()
+    filtered_tasks = [task for task in tasks if task["course_id"] == course_id]
     for task in filtered_tasks:
         print(
-            f"ID: {task.task_id}, Title: {task.title}, Due Date: {task.due_date}, Status: {task.status}"
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
 
 
@@ -195,15 +209,15 @@ def sort_tasks_by_due_date():
     """
     Sorts tasks by due date and prints them to CLI
     """
-    tasks = Task.load_tasks()
+    tasks = load_tasks()
     sorted_tasks = sorted(
-        tasks, key=lambda task: task.due_date
+        tasks, key=lambda task: task["due_date"]
     )  # Assumes format is YYYY-MM-DD
-    Task.save_tasks(sorted_tasks)
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
-            f"ID: {task.task_id}, Title: {task.title}, Due Date: {task.due_date}, Status: {task.status}"
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Status: {task['status']}"
         )
 
 
@@ -211,13 +225,13 @@ def sort_tasks_by_course_id():
     """
     Sorts tasks by course ID and prints them to CLI
     """
-    tasks = Task.load_tasks()
-    sorted_tasks = sorted(tasks, key=lambda task: task.course_id)
-    Task.save_tasks(sorted_tasks)
+    tasks = load_tasks()
+    sorted_tasks = sorted(tasks, key=lambda task: task["course_id"])
+    save_tasks(sorted_tasks)
 
     for task in sorted_tasks:
         print(
-            f"ID: {task.task_id}, Title: {task.title}, Due Date: {task.due_date}, Course ID: {task.course_id}, Status: {task.status}"
+            f"ID: {task['task_id']}, Title: {task['title']}, Due Date: {task['due_date']}, Course ID: {task['course_id']}, Status: {task['status']}"
         )
 
 
@@ -298,9 +312,7 @@ def parse_flags() -> None:
                 filter_tasks_by_due_date(due_date)
             case "-fc":
                 courses = load_courses()  # Load once for efficiency
-                course_ids = {
-                    course["id"] for course in courses
-                }  # Use a set for fast lookup
+                course_ids = {course["id"] for course in courses}  # Use a set for fast lookup
 
                 while True:
                     try:
