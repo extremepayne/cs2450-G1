@@ -19,9 +19,6 @@ class MenuWindow(tk.Frame):
         self.course_dropdown = ttk.Combobox(self, textvariable=self.course_var)
         self.course_dropdown["values"] = [
             "All Courses",
-            "CS 2450",
-            "CS 3060",
-            "CS 2420",
         ]
         self.course_dropdown.grid(row=0, column=1, padx=5)
 
@@ -48,6 +45,7 @@ class MenuWindow(tk.Frame):
 
     def update_courses(self, course_list):
         """Update the course dropdown with new course list"""
-        self.course_dropdown['values'] = course_list
+        for course in course_list:
+            self.course_dropdown["values"] += (course,)
         if "All Courses" not in self.course_var.get():
             self.course_var.set("All Courses")

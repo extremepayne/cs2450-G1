@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
+from tkinter import messagebox
 from .custom_button import CustomButton
 
 
@@ -10,6 +11,13 @@ class AddTaskView(tk.Toplevel):
         self.title("Add Task")
         self.geometry("600x450")
         self.save_callback = save_callback
+
+        # Course Dropdown
+        self.course_var = tk.StringVar(value="Choose a Course")
+        self.course_dropdown = ttk.Combobox(self, textvariable=self.course_var)
+        self.course_dropdown["values"] = [
+            "Choose a Course",
+        ]
 
         # Create entry fields
         self.create_widgets()
@@ -35,15 +43,21 @@ class AddTaskView(tk.Toplevel):
         header_label.pack(side=tk.LEFT, expand=True, pady=10)
 
         # Add close button
-        close_button = tk.Button(header_bar, text="✕", bg="#B6EEFB", font=("Arial", 12),
-                               relief="flat", command=self.destroy)
+        close_button = tk.Button(
+            header_bar,
+            text="✕",
+            bg="#B6EEFB",
+            font=("Arial", 12),
+            relief="flat",
+            command=self.destroy,
+        )
         close_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Task name
         tk.Label(main_container, text="Task Name:").grid(
             row=1, column=0, padx=5, pady=5, sticky="e"
         )
-        
+
         self.name_entry = tk.Entry(main_container, width=40)
         self.name_entry.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
@@ -65,10 +79,7 @@ class AddTaskView(tk.Toplevel):
         tk.Label(main_container, text="Course:").grid(
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
-        self.course_var = tk.StringVar(value="CS 2450")  # Default value
-        self.course_combo = ttk.Combobox(main_container, textvariable=self.course_var)
-        self.course_combo["values"] = ("CS 2450", "CS 3060", "CS 2420")  # TODO: Get from CourseList
-        self.course_combo.grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        self.course_dropdown.grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
         # Status (move to row 5)
         tk.Label(main_container, text="Status:").grid(
@@ -90,14 +101,30 @@ class AddTaskView(tk.Toplevel):
             row=0, column=1, padx=5
         )
 
+    def update_courses(self, course_list):
+        """Update the course dropdown with new course list"""
+        for course in course_list:
+            self.course_dropdown["values"] += (course,)
+        if "Choose a Course" not in self.course_var.get():
+            self.course_var.set("Choose a Course")
+
     def save_task(self):
         if self.save_callback:
+
+            # Check if required data is filled
+            if not self.name_entry.get():
+                messagebox.showinfo("Error", "Task name cannot be empty")
+                raise ValueError("Task name cannot be empty")
+            elif self.course_var.get() == "Choose a Course":
+                messagebox.showinfo("Error", "Task must have a course")
+                raise ValueError("Task must have a course")
+
             task_data = {
                 "name": self.name_entry.get(),
                 "due_date": self.due_date_entry.get(),
                 "description": self.description_text.get("1.0", "end-1c"),
                 "status": self.status_var.get(),
-                "course": self.course_var.get()  # Add course to task data
+                "course": self.course_var.get(),  # Add course to task data
             }
             self.save_callback(task_data)
         self.destroy()

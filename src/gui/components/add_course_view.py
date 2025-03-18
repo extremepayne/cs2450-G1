@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
+from tkinter import messagebox
 from .custom_button import CustomButton
 
 
@@ -35,8 +36,14 @@ class AddCourseView(tk.Toplevel):
         header_label.pack(side=tk.LEFT, expand=True, pady=10)
 
         # Add close button
-        close_button = tk.Button(header_bar, text="✕", bg="#B6EEFB", font=("Arial", 12),
-                               relief="flat", command=self.destroy)
+        close_button = tk.Button(
+            header_bar,
+            text="✕",
+            bg="#B6EEFB",
+            font=("Arial", 12),
+            relief="flat",
+            command=self.destroy,
+        )
         close_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Course name
@@ -87,6 +94,15 @@ class AddCourseView(tk.Toplevel):
 
     def save_course(self):
         if self.save_callback:
+
+            # Check if required data is filled
+            if not self.name_entry.get():
+                messagebox.showinfo("Error", "Course name cannot be empty")
+                raise ValueError("Course name cannot be empty")
+            elif not self.code_entry.get():
+                messagebox.showinfo("Error", "Course code cannot be empty")
+                raise ValueError("Course code cannot be empty")
+
             course_data = {
                 "name": self.name_entry.get(),
                 "code": self.code_entry.get(),
