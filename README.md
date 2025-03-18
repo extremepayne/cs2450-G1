@@ -8,7 +8,6 @@ This is a task manager for students.
 
 - Push notifications for deadlines
 
-
 # Instructions
 In the default home page of the application, courses and tasks are shown in nested lists where the task associated with the course will be put into the course's list. Default sorting is by due date.
 
