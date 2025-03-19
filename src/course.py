@@ -49,7 +49,21 @@ class Course:
 
     def __str__(self):
         """Returns human-readable string for print() functions"""
-        return "{" + str(self.id) + ", " + self.name + ", " + self.description + ", " + self.code + ", " + self.start_date + ", " + self.end_date + "}"
+        return (
+            "{"
+            + str(self.id)
+            + ", "
+            + self.name
+            + ", "
+            + self.description
+            + ", "
+            + self.code
+            + ", "
+            + self.start_date
+            + ", "
+            + self.end_date
+            + "}"
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
@@ -89,7 +103,7 @@ class CourseList:
         string = string[:-2]
         string += "]"
         return string
-        
+
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """
         Create a Course instance from a dictionary.

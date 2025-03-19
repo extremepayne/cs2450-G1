@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 
 TASK_FILE = "tasks.json"
 
+
 class Task:
     """A class representing a task associated with a course."""
 
@@ -123,14 +124,17 @@ class Task:
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
-                return [cls(
-                    task_id=task["task_id"],
-                    title=task["title"],
-                    description=task["description"],
-                    due_date=task["due_date"],
-                    course_id=task["course_id"],
-                    status=task["status"]
-                ) for task in tasks_data]
+                return [
+                    cls(
+                        task_id=task["task_id"],
+                        title=task["title"],
+                        description=task["description"],
+                        due_date=task["due_date"],
+                        course_id=task["course_id"],
+                        status=task["status"],
+                    )
+                    for task in tasks_data
+                ]
         except FileNotFoundError:
             return []
 
@@ -149,7 +153,7 @@ class Task:
             "description": self.description,
             "due_date": self.due_date,
             "course_id": self.course_id,
-            "status": self.status
+            "status": self.status,
         }
 
     @classmethod
@@ -161,5 +165,5 @@ class Task:
             description=data["description"],
             due_date=data["due_date"],
             course_id=data["course_id"],
-            status=data["status"]
+            status=data["status"],
         )
