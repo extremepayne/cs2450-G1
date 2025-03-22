@@ -42,12 +42,12 @@ class TestCourseMethods(unittest.TestCase):
         )
         self.assertEqual(
             course.start_date,
-            "2023-06-01",
+            date.fromisoformat("2023-06-01"),
             "ERROR: course.start_date was added unsuccessfully",
         )
         self.assertEqual(
             course.end_date,
-            "2023-06-30",
+            date.fromisoformat("2023-06-30"),
             "ERROR: course.end_date was added unsuccessfully",
         )
         print("Course added successfully")
@@ -396,7 +396,7 @@ class TestCourseMethods(unittest.TestCase):
             "ERROR: course.start_date edit unsuccessful",
         )
         self.assertEqual(
-            course.end_date, "2023-07-31", "ERROR: course.end_date edit unsuccessful"
+            course.end_date, date.fromisoformat("2023-07-31"), "ERROR: course.end_date edit unsuccessful"
         )
         print("course.start_date and course.end_date successfully edited")
         print()
