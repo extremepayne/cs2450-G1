@@ -9,6 +9,7 @@ from components.add_course_view import AddCourseView
 import os
 import sys
 from datetime import datetime, timedelta
+from typing import Optional
 
 # Add the src directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -166,8 +167,16 @@ class TaskManagerGUI:
 
         add_window.grab_set()
 
-    def apply_filters(self, course):
+    def apply_filters(self, course: str):
         """Apply filters to tasks and update display"""
+        print(course)
+        c_id: Optional[int] = None
+        the_course: Optional[Course] = None
+        for c in self.course_list.courses:
+            if course == c.code:
+                c_id = c.id
+                the_course = c
+                break
         # Clear current tasks
         for widget in self.task_container.winfo_children():
             widget.destroy()
@@ -176,17 +185,17 @@ class TaskManagerGUI:
         filtered_tasks = [
             task
             for task in self.all_tasks
-            if course == "All Courses" or task[2] == course
+            if course == "All Courses" or task.course_id == c_id
         ]
 
         # Display filtered tasks
         for task in filtered_tasks:
             task_item = TaskItem(
                 self.task_container,
-                task[0],
-                task[1],
-                task[2],
-                task[3],
+                task.title,
+                task.description,
+                the_course.code,
+                task.due_date,
                 delete_callback=self.delete_task,
                 edit_callback=self.edit_task,
             )
