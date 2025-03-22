@@ -30,6 +30,8 @@ class Task:
         self.task_id: int = task_id
         self.title: str = title
         self.description: str = description
+        if not isinstance(due_date, date):
+            raise TypeError("Due Date must be a date object")
         self.due_date: date = due_date
         self.course_id: int = course_id
         self.status: str = status

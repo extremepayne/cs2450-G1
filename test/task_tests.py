@@ -138,14 +138,14 @@ class TestTaskMethods(unittest.TestCase):
         print("Task successfully created")
         print()
 
+    def make_task_with_str_dates(self):
+        task = Task(1, "Test Task", "This is a test task", "", 1)
+
     def test_create_task_with_empty_due_date(self):
-        # Test creating a task with an empty due date
-        print("Running test to create a task with a nempty due date")
-        task = Task.create_task(1, "Test Task", "This is a test task", "", 1)
-        print("Task created:", end=" ")
-        print(task)
-        self.assertEqual(task.due_date, "", "ERROR: Unable to create task with empty due_date")
-        print("Task successfully created")
+        # Test creating a task with a strinh due date
+        print("Running test to add a task with string date")
+        self.assertRaises(TypeError, self.make_course_with_str_dates)
+        print("Task caused a TypeError correctly")
         print()
 
     def test_create_task_with_invalid_course_id(self):
