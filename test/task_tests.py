@@ -30,7 +30,10 @@ class TestTaskMethods(unittest.TestCase):
         details = task.to_dict()
         self.assertEqual(details["title"], "Test Task", "ERROR: unable to get task.title, or field is incorrect")
         self.assertEqual(details["description"], "This is a test task", "ERROR: unable to get task.description, or field is incorrect")
-        self.assertEqual(details["due_date"], date.fromisoformat("2023-06-01"), "ERROR: unable to get task.due_date, or field is incorrect")
+        # date should be a string here, and nowhere else, because the method we are testing
+        # is for preparing the task for JSON saving. JSON cannot save date objects, so we 
+        # make it into an ISO format string.
+        self.assertEqual(details["due_date"], "2023-06-01", "ERROR: unable to get task.due_date, or field is incorrect")
         self.assertEqual(details["course_id"], 1, "ERROR: unable to get task.course_id, or field is incorrect")
         self.assertEqual(details["status"], "pending", "ERROR: unable to get task.status flag, or field is incorrect")
         print("Details succefully got")
