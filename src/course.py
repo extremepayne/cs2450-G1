@@ -1,5 +1,6 @@
 import json
 from typing import List, Optional, Dict, Any
+from datetime import date
 
 COURSE_FILE = "courses.json"
 
@@ -24,8 +25,8 @@ class Course:
         name: str,
         description: str,
         code: str,
-        start_date: str,
-        end_date: str,
+        start_date: date,
+        end_date: date,
     ):
         """
         Initialize a new Course instance.
@@ -42,8 +43,8 @@ class Course:
         self.name: str = name
         self.description: str = description
         self.code: str = code
-        self.start_date: str = start_date
-        self.end_date: str = end_date
+        self.start_date: date = start_date
+        self.end_date: date = end_date
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
