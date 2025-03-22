@@ -63,8 +63,8 @@ class Course:
             "name": self.name,
             "description": self.description,
             "code": self.code,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
+            "start_date": self.start_date.isoformat(),
+            "end_date": self.end_date.isoformat(),
             "tasks": self.tasks,
             "completed_tasks": self.completed_tasks,
         }
@@ -114,6 +114,8 @@ class CourseList:
             "start_date": course_data["start_date"],
             "end_date": course_data["end_date"],
         }
+        core_attrs["start_date"] = date.fromisoformat(core_attrs["start_date"])
+        core_attrs["end_date"] = date.fromisoformat(core_attrs["end_date"])
 
         # Create course instance
         course = Course(**core_attrs)
