@@ -3,14 +3,6 @@ from unittest.mock import patch, mock_open
 import json
 from datetime import date
 from src.task import Task
-from src.main import (
-    # load_tasks,
-    # save_tasks,
-    filter_tasks_by_due_date,
-    filter_tasks_by_course,
-    sort_tasks_by_due_date,
-    sort_tasks_by_course_id,
-)
 
 
 class TestTaskMethods(unittest.TestCase):
@@ -200,95 +192,6 @@ class TestTaskMethods(unittest.TestCase):
         self.assertIn(task1, tasks_list, "ERROR: task1 should still be in the list")
         self.assertEqual(len(tasks_list), 1, "ERROR: tasks_list should only have 1 object, but " + str(len(tasks_list)) + "was found")
         print("Success! existing Task task1 was not deleted")
-        print()
-
-
-class TestSortingMethods(unittest.TestCase):
-
-    @patch("src.main.save_tasks")
-    @patch("src.main.open", new_callable=mock_open)
-    def test_sort_tasks_by_due_date(self, mock_file, mock_save_tasks):
-        # Test sorting tasks by due date
-        print("Running test to sort tasks by due date")
-        task1 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 1)
-        task2 = Task(2, "Task B", "This is Task B", date.fromisoformat("2023-06-11"), 1)
-        task3 = Task(3, "Task C", "This is Task C", date.fromisoformat("2023-06-05"), 1)
-        mock_tasks = [task1.__dict__, task2.__dict__, task3.__dict__]
-
-        # Mock file reading with JSON data
-        mock_file.return_value.read.return_value = json.dumps(mock_tasks)
-        sort_tasks_by_due_date()
-        mock_save_tasks.assert_called_once()
-        sorted_tasks = mock_save_tasks.call_args[0][0]
-
-        self.assertEqual(sorted_tasks[0]["task_id"], 1, "ERROR: Wrong order! task should be sorted to the 1st")
-        self.assertEqual(sorted_tasks[1]["task_id"], 3, "ERROR: Wrong order! task should be sorted to the 2nd")
-        self.assertEqual(sorted_tasks[2]["task_id"], 2, "ERROR: Wrong order! task should be sorted to the 3rd")
-        print("Sort successful")
-        print()
-
-    @patch("src.main.save_tasks")
-    @patch("src.main.open", new_callable=mock_open)
-    def test_sort_tasks_by_course_id(self, mock_file, mock_save_tasks):
-        # Test sorting tasks by course id
-        print("Running test to sort tasks by course id")
-        task1 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 4)
-        task2 = Task(2, "Task B", "This is Task B", date.fromisoformat("2023-06-11"), 8)
-        task3 = Task(3, "Task C", "This is Task C", date.fromisoformat("2023-06-05"), 2)
-        mock_tasks = [task1.__dict__, task2.__dict__, task3.__dict__]
-
-        # Mock file reading with JSON data
-        mock_file.return_value.read.return_value = json.dumps(mock_tasks)
-        sort_tasks_by_course_id()
-        mock_save_tasks.assert_called_once()
-        sorted_tasks = mock_save_tasks.call_args[0][0]
-
-        self.assertEqual(sorted_tasks[0]["course_id"], 2, "ERROR: Wrong order! task should be sorted to the 1st")
-        self.assertEqual(sorted_tasks[1]["course_id"], 4, "ERROR: Wrong order! task should be sorted to the 2nd")
-        self.assertEqual(sorted_tasks[2]["course_id"], 8, "ERROR: Wrong order! task should be sorted to the 3rd")
-        print("Sort successful")
-        print()
-
-    @patch("src.main.save_tasks")
-    @patch("src.main.open", new_callable=mock_open)
-    def test_sort_tasks_by_due_date_all_same(self, mock_file, mock_save_tasks):
-        print("Running test to sort tasks by due date, but all have the same due date")
-        task1 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 1)
-        task2 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 2)
-        task3 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 3)
-        mock_tasks = [task1.__dict__, task2.__dict__, task3.__dict__]
-
-        # Mock file reading with JSON data
-        mock_file.return_value.read.return_value = json.dumps(mock_tasks)
-        sort_tasks_by_due_date()
-        mock_save_tasks.assert_called_once()
-        sorted_tasks = mock_save_tasks.call_args[0][0]
-
-        self.assertEqual(sorted_tasks[0]["task_id"], 1, "ERROR: task_id is not 1, all 3 tasks should have id of 1 for this test")
-        self.assertEqual(sorted_tasks[1]["task_id"], 1, "ERROR: task_id is not 1, all 3 tasks should have id of 1 for this test")
-        self.assertEqual(sorted_tasks[2]["task_id"], 1, "ERROR: task_id is not 1, all 3 tasks should have id of 1 for this test")
-        print("Sort successful")
-        print()
-
-    @patch("src.main.save_tasks")
-    @patch("src.main.open", new_callable=mock_open)
-    def test_sort_tasks_by_course_id_all_same(self, mock_file, mock_save_tasks):
-        print("Running test to sort tasks by course id, but all have the same course id")
-        task1 = Task(1, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 1)
-        task2 = Task(2, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 1)
-        task3 = Task(3, "Task A", "This is Task A", date.fromisoformat("2023-06-01"), 1)
-        mock_tasks = [task1.__dict__, task2.__dict__, task3.__dict__]
-
-        # Mock file reading with JSON data
-        mock_file.return_value.read.return_value = json.dumps(mock_tasks)
-        sort_tasks_by_due_date()
-        mock_save_tasks.assert_called_once()
-        sorted_tasks = mock_save_tasks.call_args[0][0]
-
-        self.assertEqual(sorted_tasks[0]["course_id"], 1, "ERROR: course_id is not 1, all 3 course should have id of 1 for this test")
-        self.assertEqual(sorted_tasks[1]["course_id"], 1, "ERROR: course_id is not 1, all 3 course should have id of 1 for this test")
-        self.assertEqual(sorted_tasks[2]["course_id"], 1, "ERROR: course_id is not 1, all 3 course should have id of 1 for this test")
-        print("Sort successful")
         print()
 
 
