@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch, mock_open
 import json
+from datetime import date
 from src.task import Task
 from src.main import (
     load_tasks,
@@ -17,7 +18,7 @@ class TestTaskMethods(unittest.TestCase):
     def test_create_task(self):
         # Test creating a task
         print("Running test to create a task")
-        task = Task.create_task(1, "Test Task", "This is a test task", "2023-06-01", 1)
+        task = Task.create_task(1, "Test Task", "This is a test task", date.fromisoformat("2023-06-01"), 1)
         print("Task created:", end=" ")
         print(task)
         self.assertEqual(task.title, "Test Task", "ERROR: task.title was created unsuccessfully")
