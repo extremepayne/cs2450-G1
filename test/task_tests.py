@@ -4,8 +4,8 @@ import json
 from datetime import date
 from src.task import Task
 from src.main import (
-    load_tasks,
-    save_tasks,
+    # load_tasks,
+    # save_tasks,
     filter_tasks_by_due_date,
     filter_tasks_by_course,
     sort_tasks_by_due_date,
@@ -35,7 +35,7 @@ class TestTaskMethods(unittest.TestCase):
         task = Task(1, "Test Task", "This is a test task", date.fromisoformat("2023-06-01"), 1)
         print("Task created:", end=" ")
         print(task)
-        details = task.get_task_details()
+        details = task.to_dict()
         self.assertEqual(details["title"], "Test Task", "ERROR: unable to get task.title, or field is incorrect")
         self.assertEqual(details["description"], "This is a test task", "ERROR: unable to get task.description, or field is incorrect")
         self.assertEqual(details["due_date"], date.fromisoformat("2023-06-01"), "ERROR: unable to get task.due_date, or field is incorrect")
@@ -144,7 +144,7 @@ class TestTaskMethods(unittest.TestCase):
     def test_create_task_with_empty_due_date(self):
         # Test creating a task with a strinh due date
         print("Running test to add a task with string date")
-        self.assertRaises(TypeError, self.make_course_with_str_dates)
+        self.assertRaises(TypeError, self.make_task_with_str_dates)
         print("Task caused a TypeError correctly")
         print()
 
