@@ -43,7 +43,11 @@ class Course:
         self.name: str = name
         self.description: str = description
         self.code: str = code
+        if not isinstance(start_date, date):
+            raise TypeError("Start Date must be a date object")
         self.start_date: date = start_date
+        if not isinstance(end_date, date):
+            raise TypeError("Start Date must be a date object")
         self.end_date: date = end_date
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []

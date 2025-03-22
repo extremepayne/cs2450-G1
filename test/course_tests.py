@@ -195,18 +195,14 @@ class TestCourseMethods(unittest.TestCase):
         print("Course added successfully")
         print()
 
-    # NEED TO CHANGE THIS TEST
+    def make_course_with_str_dates(self):
+        course = Course(1, "Test Course", "This is a test course", "TC101", "", "")
+
     def test_add_course_with_empty_dates(self):
         # Test adding a course with empty start and end dates
-        print("Running test to add a course with empty start and end dates")
-        course = Course(1, "Test Course", "This is a test course", "TC101", "", "")
-        print("Course added:", end=" ")
-        print(course)
-        self.assertEqual(
-            course.start_date, "", "ERROR: course.start_date should be empty"
-        )
-        self.assertEqual(course.end_date, "", "ERROR: course.end_date should be empty")
-        print("Course added successfully")
+        print("Running test to add a course with string dates")
+        self.assertRaises(TypeError, self.make_course_with_str_dates)
+        print("Course caused a TypeError correctly")
         print()
 
     def test_delete_non_existent_course(self):
