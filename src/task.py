@@ -59,22 +59,6 @@ class Task:
         """
         return Task(task_id, title, description, due_date, course_id)
 
-    def get_task_details(self) -> Dict[str, int | date | str]:
-        """
-        Get task details as a dictionary.
-
-        Returns:
-            Dict[str, str]: Dictionary containing task details
-        """
-        return {
-            "task_id": self.task_id,
-            "title": self.title,
-            "description": self.description,
-            "due_date": self.due_date,
-            "course_id": self.course_id,
-            "status": self.status,
-        }
-
     def update_task(self, **kwargs) -> "Task":
         """
         Update task attributes using keyword arguments.
@@ -144,7 +128,7 @@ class Task:
     @staticmethod
     def save_tasks(tasks: List["Task"]) -> None:
         """Save tasks to JSON file"""
-        tasks_data = [task.get_task_details() for task in tasks]
+        tasks_data = [task.to_dict() for task in tasks]
         with open(TASK_FILE, "w") as file:
             json.dump(tasks_data, file, indent=4)
 
@@ -154,7 +138,7 @@ class Task:
             "task_id": self.task_id,
             "title": self.title,
             "description": self.description,
-            "due_date": self.due_date,
+            "due_date": self.due_date.isoformat(),
             "course_id": self.course_id,
             "status": self.status
         }
@@ -162,11 +146,14 @@ class Task:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Task":
         """Create Task instance from dictionary"""
-        return cls(
+        core_attrs = cls(
             task_id=data["task_id"],
             title=data["title"],
             description=data["description"],
             due_date=data["due_date"],
             course_id=data["course_id"],
             status=data["status"]
-        )
+            )
+        core_attrs["due_date"] = date.fromisoformat(core_attrs["due_date"])
+        return core_attrs
+        
