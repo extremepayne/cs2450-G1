@@ -1,5 +1,6 @@
 import json
 from typing import List, Dict, Any
+from datetime import date
 
 TASK_FILE = "tasks.json"
 
@@ -11,7 +12,7 @@ class Task:
         task_id: int,
         title: str,
         description: str,
-        due_date: str,
+        due_date: date,
         course_id: int,
         status: str = "pending",
     ):
@@ -29,13 +30,13 @@ class Task:
         self.task_id: int = task_id
         self.title: str = title
         self.description: str = description
-        self.due_date: str = due_date
+        self.due_date: date = due_date
         self.course_id: int = course_id
         self.status: str = status
 
     @staticmethod
     def create_task(
-        task_id: int, title: str, description: str, due_date: str, course_id: int
+        task_id: int, title: str, description: str, due_date: date, course_id: int
     ) -> "Task":
         """
         Create a new Task instance.
@@ -52,7 +53,7 @@ class Task:
         """
         return Task(task_id, title, description, due_date, course_id)
 
-    def get_task_details(self) -> Dict[str, str]:
+    def get_task_details(self) -> Dict[str, int | date | str]:
         """
         Get task details as a dictionary.
 
