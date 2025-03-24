@@ -43,18 +43,34 @@ class Course:
         self.name: str = name
         self.description: str = description
         self.code: str = code
-        if not isinstance(start_date, date):
-            raise TypeError("Start Date must be a date object")
-        self.start_date: date = start_date
-        if not isinstance(end_date, date):
-            raise TypeError("Start Date must be a date object")
-        self.end_date: date = end_date
+        try:
+            self.start_date: date = start_date
+        except ValueError:
+            raise ValueError("Invalid start date")
+        try:
+            self.end_date: date = end_date
+        except ValueError:
+            raise ValueError("Invalid end date")
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
     def __str__(self):
         """Returns human-readable string for print() functions"""
-        return "{" + str(self.id) + ", " + self.name + ", " + self.description + ", " + self.code + ", " + self.start_date.strftime("%Y/%m/%d") + ", " + self.end_date.strftime("%Y/%m/%d") + "}"
+        return (
+            "{"
+            + str(self.id)
+            + ", "
+            + self.name
+            + ", "
+            + self.description
+            + ", "
+            + self.code
+            + ", "
+            + self.start_date.strftime("%Y/%m/%d")
+            + ", "
+            + self.end_date.strftime("%Y/%m/%d")
+            + "}"
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
@@ -94,7 +110,7 @@ class CourseList:
         string = string[:-2]
         string += "]"
         return string
-        
+
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """
         Create a Course instance from a dictionary.

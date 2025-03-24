@@ -68,18 +68,10 @@ class TaskManagerGUI:
                 # Check if course already exists
                 for course in self.course_list.courses:
                     if new_course.name == course.name:
-                        messagebox.showinfo(
-                            "Error",
-                            f"Course name \"{course_data['name']}\" already exists",
-                        )
                         raise ValueError(
                             f"Course name \"{course_data['name']}\" already exists"
                         )
                     elif new_course.code == course.code:
-                        messagebox.showinfo(
-                            "Error",
-                            f"Course code \"{course_data['code']}\" already exists",
-                        )
                         raise ValueError(
                             f"Course code \"{course_data['code']}\" already exists"
                         )
@@ -123,10 +115,6 @@ class TaskManagerGUI:
                         new_task.title == task.title
                         and new_task.course_id == task.course_id
                     ):
-                        messagebox.showinfo(
-                            "Error",
-                            f"Task name \"{task_data['name']}\" in course \"{task_data['course']}\" already exists",
-                        )
                         raise ValueError(
                             f"Task name \"{task_data['name']}\" in course \"{task_data['course']}\" already exists"
                         )
