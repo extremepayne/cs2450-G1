@@ -8,7 +8,7 @@ from components.add_task_view import AddTaskView
 from components.add_course_view import AddCourseView
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 # Add the src directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -112,7 +112,7 @@ class TaskManagerGUI:
                     task_id=self.next_task_id,
                     title=task_data["name"],
                     description=task_data["description"],
-                    due_date=task_data["due_date"],
+                    due_date=date.fromisoformat(task_data["due_date"]),
                     course_id=task_data["course"],
                     status=task_data["status"],
                 )
