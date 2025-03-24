@@ -114,14 +114,15 @@ class Task:
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
-                return [cls(
+                tasks = [cls(
                     task_id=task["task_id"],
                     title=task["title"],
                     description=task["description"],
-                    due_date=task["due_date"],
+                    due_date=date.fromisoformat(task["due_date"]),
                     course_id=task["course_id"],
                     status=task["status"]
                 ) for task in tasks_data]
+                return tasks
         except FileNotFoundError:
             return []
 
