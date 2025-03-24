@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import datetime
+from datetime import date
 from .custom_button import CustomButton
 
 
@@ -115,7 +115,7 @@ class EditTaskView(tk.Toplevel):
         if self.save_callback:
             task_data = {
                 "name": self.name_entry.get(),
-                "due_date": self.due_date_entry.get(),
+                "due_date": date.fromisoformat(self.due_date_entry.get()),
                 "description": self.description_text.get("1.0", "end-1c"),
                 "status": self.status_var.get(),
                 "course": self.course_var.get(),  # Add course to task data
