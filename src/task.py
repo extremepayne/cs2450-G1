@@ -4,6 +4,7 @@ from datetime import date
 
 TASK_FILE = "tasks.json"
 
+
 class Task:
     """A class representing a task associated with a course."""
 
@@ -38,8 +39,22 @@ class Task:
 
     def __str__(self):
         """Returns human-readable string for print() functions"""
-        return "{" + str(self.task_id) + ", " + self.title + ", " + self.description + ", " + self.due_date.strftime("%Y/%m/%d") + ", " + str(self.course_id) + ", " + self.status + "}"
-    
+        return (
+            "{"
+            + str(self.task_id)
+            + ", "
+            + self.title
+            + ", "
+            + self.description
+            + ", "
+            + self.due_date.strftime("%Y/%m/%d")
+            + ", "
+            + str(self.course_id)
+            + ", "
+            + self.status
+            + "}"
+        )
+
     @staticmethod
     def create_task(
         task_id: int, title: str, description: str, due_date: date, course_id: int
@@ -114,14 +129,17 @@ class Task:
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
-                tasks = [cls(
-                    task_id=task["task_id"],
-                    title=task["title"],
-                    description=task["description"],
-                    due_date=date.fromisoformat(task["due_date"]),
-                    course_id=task["course_id"],
-                    status=task["status"]
-                ) for task in tasks_data]
+                tasks = [
+                    cls(
+                        task_id=task["task_id"],
+                        title=task["title"],
+                        description=task["description"],
+                        due_date=date.fromisoformat(task["due_date"]),
+                        course_id=task["course_id"],
+                        status=task["status"],
+                    )
+                    for task in tasks_data
+                ]
                 return tasks
         except FileNotFoundError:
             return []
@@ -141,7 +159,7 @@ class Task:
             "description": self.description,
             "due_date": self.due_date.isoformat(),
             "course_id": self.course_id,
-            "status": self.status
+            "status": self.status,
         }
 
     @classmethod
@@ -153,8 +171,7 @@ class Task:
             description=data["description"],
             due_date=data["due_date"],
             course_id=data["course_id"],
-            status=data["status"]
-            )
+            status=data["status"],
+        )
         core_attrs["due_date"] = date.fromisoformat(core_attrs["due_date"])
         return core_attrs
-        

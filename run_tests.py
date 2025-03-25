@@ -10,15 +10,18 @@ def run_all_tests():
     runner = unittest.TextTestRunner()
     runner.run(suite)
 
+
 def parse_flags() -> None:
-    pass #will be implemented later
+    pass  # will be implemented later
+
+
 """
     flags = {
         "-h": "help",
         "-v": "verbose",
     }
 """
-    
+
 
 if __name__ == "__main__":
     print("Running test suite via unittest...")
