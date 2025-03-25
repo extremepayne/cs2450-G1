@@ -114,7 +114,7 @@ def create_task() -> None:
         description=input("Enter task description: "),
         due_date=input("Enter due date: "),
         course_id=course_id,
-        status="pending"
+        status="pending",
     )
     tasks.append(new_task)
     Task.save_tasks(tasks)

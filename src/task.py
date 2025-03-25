@@ -1,7 +1,9 @@
 import json
 from typing import List, Dict, Any
+from datetime import date
 
 TASK_FILE = "tasks.json"
+
 
 class Task:
     """A class representing a task associated with a course."""
@@ -11,7 +13,7 @@ class Task:
         task_id: int,
         title: str,
         description: str,
-        due_date: str,
+        due_date: date,
         course_id: int,
         status: str = "pending",
     ):
@@ -29,13 +31,33 @@ class Task:
         self.task_id: int = task_id
         self.title: str = title
         self.description: str = description
-        self.due_date: str = due_date
+        if not isinstance(due_date, date):
+            raise TypeError("Due Date must be a date object")
+        self.due_date: date = due_date
         self.course_id: int = course_id
         self.status: str = status
 
+    def __str__(self):
+        """Returns human-readable string for print() functions"""
+        return (
+            "{"
+            + str(self.task_id)
+            + ", "
+            + self.title
+            + ", "
+            + self.description
+            + ", "
+            + self.due_date.strftime("%Y/%m/%d")
+            + ", "
+            + str(self.course_id)
+            + ", "
+            + self.status
+            + "}"
+        )
+
     @staticmethod
     def create_task(
-        task_id: int, title: str, description: str, due_date: str, course_id: int
+        task_id: int, title: str, description: str, due_date: date, course_id: int
     ) -> "Task":
         """
         Create a new Task instance.
@@ -51,22 +73,6 @@ class Task:
             Task: New Task instance
         """
         return Task(task_id, title, description, due_date, course_id)
-
-    def get_task_details(self) -> Dict[str, str]:
-        """
-        Get task details as a dictionary.
-
-        Returns:
-            Dict[str, str]: Dictionary containing task details
-        """
-        return {
-            "task_id": self.task_id,
-            "title": self.title,
-            "description": self.description,
-            "due_date": self.due_date,
-            "course_id": self.course_id,
-            "status": self.status,
-        }
 
     def update_task(self, **kwargs) -> "Task":
         """
@@ -123,21 +129,25 @@ class Task:
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
-                return [cls(
-                    task_id=task["task_id"],
-                    title=task["title"],
-                    description=task["description"],
-                    due_date=task["due_date"],
-                    course_id=task["course_id"],
-                    status=task["status"]
-                ) for task in tasks_data]
+                tasks = [
+                    cls(
+                        task_id=task["task_id"],
+                        title=task["title"],
+                        description=task["description"],
+                        due_date=date.fromisoformat(task["due_date"]),
+                        course_id=task["course_id"],
+                        status=task["status"],
+                    )
+                    for task in tasks_data
+                ]
+                return tasks
         except FileNotFoundError:
             return []
 
     @staticmethod
     def save_tasks(tasks: List["Task"]) -> None:
         """Save tasks to JSON file"""
-        tasks_data = [task.get_task_details() for task in tasks]
+        tasks_data = [task.to_dict() for task in tasks]
         with open(TASK_FILE, "w") as file:
             json.dump(tasks_data, file, indent=4)
 
@@ -147,19 +157,21 @@ class Task:
             "task_id": self.task_id,
             "title": self.title,
             "description": self.description,
-            "due_date": self.due_date,
+            "due_date": self.due_date.isoformat(),
             "course_id": self.course_id,
-            "status": self.status
+            "status": self.status,
         }
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Task":
         """Create Task instance from dictionary"""
-        return cls(
+        core_attrs = cls(
             task_id=data["task_id"],
             title=data["title"],
             description=data["description"],
             due_date=data["due_date"],
             course_id=data["course_id"],
-            status=data["status"]
+            status=data["status"],
         )
+        core_attrs["due_date"] = date.fromisoformat(core_attrs["due_date"])
+        return core_attrs

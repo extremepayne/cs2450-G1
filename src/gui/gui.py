@@ -8,7 +8,7 @@ from components.add_task_view import AddTaskView
 from components.add_course_view import AddCourseView
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 # Add the src directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -68,18 +68,10 @@ class TaskManagerGUI:
                 # Check if course already exists
                 for course in self.course_list.courses:
                     if new_course.name == course.name:
-                        messagebox.showinfo(
-                            "Error",
-                            f"Course name \"{course_data['name']}\" already exists",
-                        )
                         raise ValueError(
                             f"Course name \"{course_data['name']}\" already exists"
                         )
                     elif new_course.code == course.code:
-                        messagebox.showinfo(
-                            "Error",
-                            f"Course code \"{course_data['code']}\" already exists",
-                        )
                         raise ValueError(
                             f"Course code \"{course_data['code']}\" already exists"
                         )
@@ -112,7 +104,7 @@ class TaskManagerGUI:
                     task_id=self.next_task_id,
                     title=task_data["name"],
                     description=task_data["description"],
-                    due_date=task_data["due_date"],
+                    due_date=date.fromisoformat(task_data["due_date"]),
                     course_id=task_data["course"],
                     status=task_data["status"],
                 )
@@ -123,10 +115,6 @@ class TaskManagerGUI:
                         new_task.title == task.title
                         and new_task.course_id == task.course_id
                     ):
-                        messagebox.showinfo(
-                            "Error",
-                            f"Task name \"{task_data['name']}\" in course \"{task_data['course']}\" already exists",
-                        )
                         raise ValueError(
                             f"Task name \"{task_data['name']}\" in course \"{task_data['course']}\" already exists"
                         )

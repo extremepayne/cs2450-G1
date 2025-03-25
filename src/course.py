@@ -1,5 +1,6 @@
 import json
 from typing import List, Optional, Dict, Any
+from datetime import date
 
 COURSE_FILE = "courses.json"
 
@@ -24,8 +25,8 @@ class Course:
         name: str,
         description: str,
         code: str,
-        start_date: str,
-        end_date: str,
+        start_date: date,
+        end_date: date,
     ):
         """
         Initialize a new Course instance.
@@ -42,14 +43,32 @@ class Course:
         self.name: str = name
         self.description: str = description
         self.code: str = code
-        self.start_date: str = start_date
-        self.end_date: str = end_date
+        if not isinstance(start_date, date):
+            raise TypeError("Start Date must be a date object")
+        self.start_date: date = start_date
+        if not isinstance(end_date, date):
+            raise TypeError("Start Date must be a date object")
+        self.end_date: date = end_date
         self.tasks: List[dict] = []
         self.completed_tasks: List[dict] = []
 
     def __str__(self):
         """Returns human-readable string for print() functions"""
-        return "{" + str(self.id) + ", " + self.name + ", " + self.description + ", " + self.code + ", " + self.start_date + ", " + self.end_date + "}"
+        return (
+            "{"
+            + str(self.id)
+            + ", "
+            + self.name
+            + ", "
+            + self.description
+            + ", "
+            + self.code
+            + ", "
+            + self.start_date.strftime("%Y/%m/%d")
+            + ", "
+            + self.end_date.strftime("%Y/%m/%d")
+            + "}"
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
@@ -58,8 +77,8 @@ class Course:
             "name": self.name,
             "description": self.description,
             "code": self.code,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
+            "start_date": self.start_date.isoformat(),
+            "end_date": self.end_date.isoformat(),
             "tasks": self.tasks,
             "completed_tasks": self.completed_tasks,
         }
@@ -89,7 +108,7 @@ class CourseList:
         string = string[:-2]
         string += "]"
         return string
-        
+
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """
         Create a Course instance from a dictionary.
@@ -109,6 +128,8 @@ class CourseList:
             "start_date": course_data["start_date"],
             "end_date": course_data["end_date"],
         }
+        core_attrs["start_date"] = date.fromisoformat(core_attrs["start_date"])
+        core_attrs["end_date"] = date.fromisoformat(core_attrs["end_date"])
 
         # Create course instance
         course = Course(**core_attrs)

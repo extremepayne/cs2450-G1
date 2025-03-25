@@ -1,8 +1,10 @@
 import tkinter as tk
-from tkinter import ttk
-from datetime import datetime
+from tkinter import *
+from datetime import date
 from tkinter import messagebox
 from .custom_button import CustomButton
+
+# from tkcalendar import Calendar # Add tkcalendar for date input
 
 
 class AddCourseView(tk.Toplevel):
@@ -99,16 +101,45 @@ class AddCourseView(tk.Toplevel):
             if not self.name_entry.get():
                 messagebox.showinfo("Error", "Course name cannot be empty")
                 raise ValueError("Course name cannot be empty")
-            elif not self.code_entry.get():
+
+            if not self.code_entry.get():
                 messagebox.showinfo("Error", "Course code cannot be empty")
                 raise ValueError("Course code cannot be empty")
+
+            if not self.start_date_entry.get():
+                messagebox.showinfo("Error", "Start date cannot be empty")
+                raise ValueError("Start date cannot be empty")
+            try:
+                start_date = date.fromisoformat(self.start_date_entry.get())
+            except ValueError:
+                messagebox.showinfo(
+                    "Error",
+                    f"{self.start_date_entry.get()} is not a valid YYYY-MM-DD date",
+                )
+                raise ValueError(
+                    f"{self.start_date_entry.get()} is not a valid YYYY-MM-DD date"
+                )
+
+            if not self.end_date_entry.get():
+                messagebox.showinfo("Error", "End date cannot be empty")
+                raise ValueError("End date cannot be empty")
+            try:
+                end_date = date.fromisoformat(self.end_date_entry.get())
+            except ValueError:
+                messagebox.showinfo(
+                    "Error",
+                    f"{self.end_date_entry.get()} is not a valid YYYY-MM-DD date",
+                )
+                raise ValueError(
+                    f"{self.end_date_entry.get()} is not a valid YYYY-MM-DD date"
+                )
 
             course_data = {
                 "name": self.name_entry.get(),
                 "code": self.code_entry.get(),
                 "description": self.description_text.get("1.0", "end-1c"),
-                "start_date": self.start_date_entry.get(),
-                "end_date": self.end_date_entry.get(),
+                "start_date": start_date,
+                "end_date": end_date,
             }
             self.save_callback(course_data)
         self.destroy()
