@@ -69,6 +69,10 @@ class Course:
             + self.end_date.strftime("%Y/%m/%d")
             + "}"
         )
+    
+    def __getitem__():
+        """Make this object subscriptable"""
+        pass
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
