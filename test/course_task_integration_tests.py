@@ -131,3 +131,63 @@ class TestCourseTaskIntegration(unittest.TestCase):
         self.assertEqual(len(loaded_tasks), 1)
         course = self.course_list.courses[0]
         self.assertTrue(loaded_tasks[0].due_date > course.end_date)
+
+    def test_multiple_tasks_per_course(self):
+        """Test handling multiple tasks associated with one course"""
+        # Create multiple tasks for same course
+        task1 = Task(1, "Task 1", "First task", date.date.today(), self.course.id)
+        task2 = Task(2, "Task 2", "Second task", date.date.today(), self.course.id)
+        Task.save_tasks([task1, task2])
+
+        # Verify both tasks saved correctly
+        loaded_tasks = Task.load_tasks()
+        self.assertEqual(len(loaded_tasks), 2)
+        self.assertTrue(all(t.course_id == self.course.id for t in loaded_tasks))
+
+    def test_task_before_course_start(self):
+        """Test creating task with due date before course starts"""
+        past_date = date.date.today() - date.timedelta(days=10)
+        task = Task(
+            1, "Early Task", "Due before course starts", past_date, self.course.id
+        )
+        Task.save_tasks([task])
+
+        loaded_tasks = Task.load_tasks()
+        self.assertEqual(len(loaded_tasks), 1)
+        self.assertTrue(loaded_tasks[0].due_date < self.course.start_date)
+
+    def test_update_course_dates_with_tasks(self):
+        """Test updating course dates affects existing tasks"""
+        task = Task(1, "Test Task", "Description", date.date.today(), self.course.id)
+        Task.save_tasks([task])
+
+        # Update course dates
+        new_start = date.date.today() + date.timedelta(days=60)
+        new_end = new_start + date.timedelta(days=30)
+        self.course.start_date = new_start
+        self.course.end_date = new_end
+        self.course_list.save_courses()
+
+        # Verify task still exists and dates unchanged
+        loaded_tasks = Task.load_tasks()
+        self.assertEqual(len(loaded_tasks), 1)
+        self.assertEqual(loaded_tasks[0].due_date, date.date.today())
+
+    def test_concurrent_course_task_updates(self):
+        """Test handling concurrent updates to courses and tasks"""
+        # Create initial task
+        task = Task(1, "Test Task", "Description", date.date.today(), self.course.id)
+        Task.save_tasks([task])
+
+        # Modify course and task "concurrently"
+        self.course.name = "Updated Course"
+        self.course_list.save_courses()
+        task.title = "Updated Task"
+        Task.save_tasks([task])
+
+        # Verify both updates persisted
+        loaded_courses = self.course_list.load_courses()
+        loaded_tasks = Task.load_tasks()
+        self.assertEqual(loaded_courses[0].name, "Updated Course")
+        self.assertEqual(loaded_tasks[0].title, "Updated Task")
+        self.assertEqual(loaded_tasks[0].course_id, self.course.id)
