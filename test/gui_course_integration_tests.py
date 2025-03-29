@@ -41,3 +41,38 @@ class IntegrationGUITests(unittest.TestCase):
         if os.path.exists(TASK_FILE):
             os.remove(TASK_FILE)
         self.root.destroy()
+
+    def test_add_task_updates_gui(self):
+        """Test that adding a task updates the GUI"""
+        # Get initial task count
+        initial_tasks = len(self.gui.task_container.winfo_children())
+
+        # Create and add new task
+        task = Task(1, "Test Task", "Description", date.today(), self.course.id)
+        self.gui.all_tasks.append(task)
+        Task.save_tasks(self.gui.all_tasks)
+
+        # Refresh GUI
+        self.gui.setup_gui()
+
+        # Verify task count increased
+        final_tasks = len(self.gui.task_container.winfo_children())
+        self.assertEqual(final_tasks, initial_tasks + 1)
+
+    def test_delete_task_updates_gui(self):
+        """Test that deleting a task updates the GUI"""
+        # Add task first
+        task = Task(1, "Test Task", "Description", date.today(), self.course.id)
+        self.gui.all_tasks.append(task)
+        Task.save_tasks(self.gui.all_tasks)
+        self.gui.setup_gui()
+
+        # Get initial task count
+        initial_tasks = len(self.gui.task_container.winfo_children())
+
+        # Delete task
+        self.gui.delete_task("Test Task")
+
+        # Verify task was removed from GUI
+        final_tasks = len(self.gui.task_container.winfo_children())
+        self.assertEqual(final_tasks, initial_tasks - 1)

@@ -1,7 +1,7 @@
 import json
 from typing import List, Optional, Dict, Any
 from datetime import date
-from src.task import Task
+from task import Task
 
 COURSE_FILE = "courses.json"
 

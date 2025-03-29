@@ -1,31 +1,36 @@
 import tkinter as tk
 from tkinter import messagebox
-from components.custom_button import CustomButton
-from components.task_visual import TaskItem
-from components.filter_menu import MenuWindow
-from components.edit_task_view import EditTaskView
-from components.add_task_view import AddTaskView
-from components.add_course_view import AddCourseView
-import os
 import sys
+import os
 from datetime import datetime, timedelta, date
 
-# Add the src directory to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add src directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.dirname(current_dir)
+sys.path.append(src_dir)
 
-from course import Course, CourseList  # Now using absolute import
-from task import Task  # Now using absolute import
+# Define assets directory
+assets_dir = os.path.join(current_dir, "assets")
 
-# Create the main window
-root = tk.Tk()
-root.title("Course Task Manager")
-root.geometry("1500x900")
+# Local imports
+from .components.custom_button import CustomButton
+from .components.task_visual import TaskItem
+from .components.filter_menu import MenuWindow
+from .components.edit_task_view import EditTaskView
+from .components.add_task_view import AddTaskView
+from .components.add_course_view import AddCourseView
 
-# Change the window background color
-root.configure(background="#E6E6E6")
+# Core imports
+from course import Course, CourseList
+from task import Task
 
-nav_bar = tk.Frame(root, bg="#B6EEFB", height=75)
-nav_bar.pack(fill=tk.X)
+# # Create the main window
+# root = tk.Tk()
+# root.title("Course Task Manager")
+# root.geometry("1500x900")
+
+# # Change the window background color
+# root.configure(background="#E6E6E6")
 
 
 def resize_image(image_path, width, height):
@@ -36,15 +41,20 @@ def resize_image(image_path, width, height):
 
 
 class TaskManagerGUI:
-    def __init__(self):
+    def __init__(self, root=None):
+
+        self.root = root
         self.course_list = CourseList()
-        self.all_tasks = Task.load_tasks()  # Load existing tasks from JSON
+        self.all_tasks = Task.load_tasks()
         self.task_container = None
         self.filter_menu = None
-        self.next_task_id = (
-            len(self.all_tasks) + 1
-        )  # Set next ID based on existing tasks
-        self.setup_gui()
+        self.next_task_id = len(self.all_tasks) + 1
+        self.nav_bar = tk.Frame(root, bg="#B6EEFB", height=75)
+        self.nav_bar.pack(fill=tk.X)
+
+        # Only setup GUI if root is provided
+        if root:
+            self.setup_gui()
 
     def save_tasks(self):
         self.course_list.save_courses()
@@ -182,7 +192,7 @@ class TaskManagerGUI:
 
     def setup_gui(self):
         # Create filter menu with reference to self
-        self.filter_menu = MenuWindow(root, self.apply_filters)
+        self.filter_menu = MenuWindow(self.root, self.apply_filters)
 
         # Update the filter menu course list
         self.update_course_filters()
@@ -219,24 +229,24 @@ class TaskManagerGUI:
         except Exception as e:
             # Fallback to text button if image fails to load
             menu_button = CustomButton(
-                nav_bar, text="Filter", command=toggle_filter_menu
+                self.nav_bar, text="Filter", command=toggle_filter_menu
             )
             menu_button.pack(side=tk.LEFT, padx=10, pady=10)
 
         # Add Task Button (now using the class method)
         add_task_button = CustomButton(
-            nav_bar, text="+ Add Task", command=self.add_new_task
+            self.nav_bar, text="+ Add Task", command=self.add_new_task
         )
         add_task_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Add Course Button - place it next to Add Task
         add_course_button = CustomButton(
-            nav_bar, text="+ Add Course", command=self.add_new_course
+            self.nav_bar, text="+ Add Course", command=self.add_new_course
         )
         add_course_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
         # Create a container for tasks below the nav bar
-        self.task_container = tk.Frame(root, bg="#E6E6E6")
+        self.task_container = tk.Frame(self.root, bg="#E6E6E6")
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
 
         # Display existing tasks if any
@@ -352,6 +362,15 @@ class TaskManagerGUI:
         edit_window.grab_set()
 
 
-# Run the application
-TaskManagerGUI()
-root.mainloop()
+def main():
+    root = tk.Tk()
+    root.title("Course Task Manager")
+    root.geometry("1500x900")
+    root.configure(background="#E6E6E6")
+
+    app = TaskManagerGUI(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
