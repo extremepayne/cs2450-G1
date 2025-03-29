@@ -1,6 +1,7 @@
 import json
 from typing import List, Optional, Dict, Any
 from datetime import date
+from src.task import Task
 
 COURSE_FILE = "courses.json"
 
@@ -188,3 +189,8 @@ class CourseList:
         """
         self.courses = [course for course in self.courses if course.id != id]
         self.save_courses()
+
+        # delete associated tasks
+        tasks = Task.load_tasks()
+        tasks = [task for task in tasks if task.course_id != id]
+        Task.save_tasks(tasks)

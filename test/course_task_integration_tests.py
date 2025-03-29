@@ -14,7 +14,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
             os.remove(TASK_FILE)
         self.course_list = CourseList()
         # starting with a course because almost all tests require a course
-        course = Course(
+        self.course = Course(
             1,
             "Test Course",
             "This is a test course",
@@ -22,7 +22,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
             date.date.today(),
             date.date.today() + date.timedelta(days=30),
         )
-        self.course_list.add_course(course)
+        self.course_list.add_course(self.course)
 
     def tearDown(self):
         # Clean up test data files after each test
@@ -40,7 +40,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
         loaded_tasks = Task.load_tasks()
         self.assertEqual(len(loaded_tasks), 1)
         # checking if the task is "in" the course
-        self.assertEqual(loaded_tasks[0].course_id, course.id)
+        self.assertEqual(loaded_tasks[0].course_id, self.course.id)
 
     def test_delete_course_with_tasks(self):
         task = Task(1, "Test Task", "This is a test task", date.date.today(), 1)
@@ -48,7 +48,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
         Task.save_tasks([task])
 
         # delete the course
-        self.course_list.delete_course(course.id)
+        self.course_list.delete_course(self.course.id)
 
         # Verify the course was deleted
         loaded_courses = self.course_list.load_courses()
