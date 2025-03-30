@@ -103,3 +103,68 @@
   * Issue was fixed as of writing this report
 * Test for invalid `course_id` for `task()` confirms the id is an invalid number (`-1`) instead of throwing errors (minor concern).
   * Should be fine as `-1` does indicate errors
+
+  ## Integration Testing
+
+  # Integration Test Report
+
+## Course-Task Integration Tests
+
+### Test Cases
+1. Adding task to course
+   - Creates task and associates with course ID 1
+   - Task successfully saves to task.json
+   - Task correctly loads with course reference intact
+
+2. Deleting course with tasks
+   - Course deletion cascades to associated tasks
+   - Both course and tasks removed from respective JSON files
+   - No orphaned tasks remain
+
+3. Editing course with tasks  
+   - Task associations maintained after course edit
+   - Course changes persist in courses.json
+   - Task course references remain valid
+
+4. Task with invalid course ID
+   - System allows creating orphaned tasks
+   - Task loads successfully despite invalid course ID
+   - Course list properly excludes invalid IDs
+
+5. Data persistence across operations
+   - Course/task relationships maintained after delete
+   - New course creation properly links new tasks
+   - All relationships survive save/load cycle
+
+6. Task date validation
+   - Tasks can be due after course end date
+   - Tasks can be due before course start date
+   - Date validation remains functional
+
+## GUI Integration Tests 
+
+### Test Cases
+1. Adding task via GUI
+   - Task appears in UI list
+   - Task saves to JSON
+   - Course filter updates
+
+2. Editing task via GUI
+   - Changes reflect in UI
+   - Updates persist to JSON
+   - Task-course relationship maintained
+
+### Test Results
+- All course-task integration tests passed successfully
+- GUI integration with task/course data layer working as expected
+- JSON persistence functioning correctly
+
+### Issues Found
+1. Tasks can reference non-existent courses (by design)
+2. Course deletion cascades could be more explicit
+3. GUI needs better error handling for invalid course IDs
+
+## Environment
+- Python 3.12+
+- tkinter for GUI
+- JSON files for persistence
