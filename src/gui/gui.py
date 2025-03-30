@@ -20,17 +20,13 @@ from .components.edit_task_view import EditTaskView
 from .components.add_task_view import AddTaskView
 from .components.add_course_view import AddCourseView
 
-# Core imports
+# Add src directory to path if not already there
+src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
+
 from course import Course, CourseList
 from task import Task
-
-# # Create the main window
-# root = tk.Tk()
-# root.title("Course Task Manager")
-# root.geometry("1500x900")
-
-# # Change the window background color
-# root.configure(background="#E6E6E6")
 
 
 def resize_image(image_path, width, height):
@@ -95,7 +91,7 @@ class TaskManagerGUI:
             except ValueError as e:
                 messagebox.showerror("Error", str(e))
 
-        add_window = AddCourseView(root, save_callback=save_new_course)
+        add_window = AddCourseView(self.root, save_callback=save_new_course)
         add_window.grab_set()
 
     def update_course_filters(self):
@@ -157,7 +153,7 @@ class TaskManagerGUI:
             except ValueError as e:
                 messagebox.showerror("Error", str(e))
 
-        add_window = AddTaskView(root, save_callback=save_new_task)
+        add_window = AddTaskView(self.root, save_callback=save_new_task)
 
         course_codes = [course.code for course in self.course_list.courses]
         add_window.update_courses(course_codes)
@@ -209,7 +205,7 @@ class TaskManagerGUI:
                 # Implement other saving logic here
 
             edit_window = EditTaskView(
-                root, task_id=task_id, save_callback=save_changes
+                self.root, task_id=task_id, save_callback=save_changes
             )
             edit_window.grab_set()  # Make window modal
 
@@ -305,6 +301,8 @@ class TaskManagerGUI:
             ]
             # Save updated task list to JSON
             Task.save_tasks(self.all_tasks)
+
+            self.setup_gui()
             return True  # Return True to trigger widget destruction
         return False
 
@@ -348,7 +346,7 @@ class TaskManagerGUI:
 
         # Open edit window with current task data
         edit_window = EditTaskView(
-            root,
+            self.root,
             task_id=task_to_edit.task_id,
             task_data={
                 "name": task_to_edit.title,

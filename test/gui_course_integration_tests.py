@@ -1,6 +1,6 @@
 import unittest
 import tkinter as tk
-from datetime import date
+from datetime import date, timedelta
 import os
 from src.course import Course, CourseList, COURSE_FILE
 from src.task import Task, TASK_FILE
@@ -21,7 +21,7 @@ class IntegrationGUITests(unittest.TestCase):
         self.root = tk.Tk()
 
         # Create TaskManagerGUI instance
-        self.gui = TaskManagerGUI()
+        self.gui = TaskManagerGUI(self.root)
 
         # Create sample course
         self.course = Course(

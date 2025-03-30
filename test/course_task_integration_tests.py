@@ -1,8 +1,8 @@
 import unittest
 from src.course import Course, CourseList, COURSE_FILE
-from src.task import Task, TASK_FILE
+from src.task import Task, TASK_FILE  # Change to absolute import
 import os
-import datetime as date
+from datetime import date, timedelta  # Use datetime directly
 
 
 class TestCourseTaskIntegration(unittest.TestCase):
@@ -19,8 +19,8 @@ class TestCourseTaskIntegration(unittest.TestCase):
             "Test Course",
             "This is a test course",
             "TC101",
-            date.date.today(),
-            date.date.today() + date.timedelta(days=30),
+            date.today(),
+            date.today() + timedelta(days=30),
         )
         self.course_list.add_course(self.course)
 
@@ -33,7 +33,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
 
     def test_add_task_to_course(self):
         # Test adding a task to a course
-        task = Task(1, "Test Task", "This is a test task", date.date.today(), 1)
+        task = Task(1, "Test Task", "This is a test task", date.today(), 1)
         # saving it to the task file
         Task.save_tasks([task])
 
@@ -43,7 +43,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
         self.assertEqual(loaded_tasks[0].course_id, self.course.id)
 
     def test_delete_course_with_tasks(self):
-        task = Task(1, "Test Task", "This is a test task", date.date.today(), 1)
+        task = Task(1, "Test Task", "This is a test task", date.today(), 1)
         # saving it to the task file
         Task.save_tasks([task])
 
@@ -61,7 +61,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
     def test_edit_course_with_tasks(self):
         """Test that tasks remain associated when editing a course"""
         # Create and save a task
-        task = Task(1, "Test Task", "This is a test task", date.date.today(), 1)
+        task = Task(1, "Test Task", "This is a test task", date.today(), 1)
         Task.save_tasks([task])
 
         # Edit the course
@@ -78,7 +78,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
     def test_task_with_invalid_course_id(self):
         """Test handling tasks with non-existent course IDs"""
         # Create task with non-existent course ID
-        task = Task(1, "Test Task", "Test Description", date.date.today(), 999)
+        task = Task(1, "Test Task", "Test Description", date.today(), 999)
         Task.save_tasks([task])
 
         # Load and verify task saved but orphaned
@@ -93,7 +93,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
     def test_persistence_across_operations(self):
         """Test data integrity across multiple operations"""
         # Add initial task
-        task1 = Task(1, "Task 1", "First task", date.date.today(), 1)
+        task1 = Task(1, "Task 1", "First task", date.today(), 1)
         Task.save_tasks([task1])
 
         # Delete course and verify task deleted
@@ -106,12 +106,12 @@ class TestCourseTaskIntegration(unittest.TestCase):
             "New Course",
             "New Description",
             "NC101",
-            date.date.today(),
-            date.date.today() + date.timedelta(days=30),
+            date.today(),
+            date.today() + timedelta(days=30),
         )
         self.course_list.add_course(new_course)
 
-        task2 = Task(2, "Task 2", "Second task", date.date.today(), 2)
+        task2 = Task(2, "Task 2", "Second task", date.today(), 2)
         Task.save_tasks([task2])
 
         # Verify final state
@@ -122,7 +122,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
     def test_task_date_validation(self):
         """Test task dates relative to course dates"""
         # Create task due after course end date
-        future_date = date.date.today() + date.timedelta(days=60)
+        future_date = date.today() + timedelta(days=60)
         task = Task(1, "Late Task", "Task due after course ends", future_date, 1)
         Task.save_tasks([task])
 
@@ -135,8 +135,8 @@ class TestCourseTaskIntegration(unittest.TestCase):
     def test_multiple_tasks_per_course(self):
         """Test handling multiple tasks associated with one course"""
         # Create multiple tasks for same course
-        task1 = Task(1, "Task 1", "First task", date.date.today(), self.course.id)
-        task2 = Task(2, "Task 2", "Second task", date.date.today(), self.course.id)
+        task1 = Task(1, "Task 1", "First task", date.today(), self.course.id)
+        task2 = Task(2, "Task 2", "Second task", date.today(), self.course.id)
         Task.save_tasks([task1, task2])
 
         # Verify both tasks saved correctly
@@ -146,7 +146,7 @@ class TestCourseTaskIntegration(unittest.TestCase):
 
     def test_task_before_course_start(self):
         """Test creating task with due date before course starts"""
-        past_date = date.date.today() - date.timedelta(days=10)
+        past_date = date.today() - timedelta(days=10)
         task = Task(
             1, "Early Task", "Due before course starts", past_date, self.course.id
         )
@@ -158,12 +158,12 @@ class TestCourseTaskIntegration(unittest.TestCase):
 
     def test_update_course_dates_with_tasks(self):
         """Test updating course dates affects existing tasks"""
-        task = Task(1, "Test Task", "Description", date.date.today(), self.course.id)
+        task = Task(1, "Test Task", "Description", date.today(), self.course.id)
         Task.save_tasks([task])
 
         # Update course dates
-        new_start = date.date.today() + date.timedelta(days=60)
-        new_end = new_start + date.timedelta(days=30)
+        new_start = date.today() + timedelta(days=60)
+        new_end = new_start + timedelta(days=30)
         self.course.start_date = new_start
         self.course.end_date = new_end
         self.course_list.save_courses()
@@ -171,12 +171,12 @@ class TestCourseTaskIntegration(unittest.TestCase):
         # Verify task still exists and dates unchanged
         loaded_tasks = Task.load_tasks()
         self.assertEqual(len(loaded_tasks), 1)
-        self.assertEqual(loaded_tasks[0].due_date, date.date.today())
+        self.assertEqual(loaded_tasks[0].due_date, date.today())
 
     def test_concurrent_course_task_updates(self):
         """Test handling concurrent updates to courses and tasks"""
         # Create initial task
-        task = Task(1, "Test Task", "Description", date.date.today(), self.course.id)
+        task = Task(1, "Test Task", "Description", date.today(), self.course.id)
         Task.save_tasks([task])
 
         # Modify course and task "concurrently"

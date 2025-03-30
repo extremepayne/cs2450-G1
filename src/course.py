@@ -1,6 +1,14 @@
 import json
 from typing import List, Optional, Dict, Any
 from datetime import date
+import os
+import sys
+
+# Add src to path if not already there
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
 from task import Task
 
 COURSE_FILE = "courses.json"
