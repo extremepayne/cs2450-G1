@@ -53,22 +53,8 @@ class Course:
         self.completed_tasks: List[dict] = []
 
     def __str__(self):
-        """Returns human-readable string for print() functions"""
-        return (
-            "{"
-            + str(self.id)
-            + ", "
-            + self.name
-            + ", "
-            + self.description
-            + ", "
-            + self.code
-            + ", "
-            + self.start_date.strftime("%Y/%m/%d")
-            + ", "
-            + self.end_date.strftime("%Y/%m/%d")
-            + "}"
-        )
+        """Returns a human-readable string representation of the course."""
+        return f"{{id: {self.id}, name: {self.name}, code: {self.code}, start_date: {self.start_date}, end_date: {self.end_date}}}"
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert Course instance to dictionary for JSON serialization."""
@@ -100,14 +86,9 @@ class CourseList:
         """Initialize CourseList and load existing courses from storage."""
         self.courses: List[Course] = self.load_courses()
 
-    def __str__(self):
-        """Returns human-readable string for print() functions"""
-        string: str = "["
-        for course in self.courses:
-            string = string + str(course) + ", "
-        string = string[:-2]
-        string += "]"
-        return string
+    def __str__(self) -> str:
+        """Returns a human-readable string representation of the CourseList."""
+        return "[" + ", ".join(str(course) for course in self.courses) + "]"
 
     def _create_course_from_dict(self, course_data: Dict[str, Any]) -> Course:
         """
@@ -119,26 +100,22 @@ class CourseList:
         Returns:
             Course: New Course instance created from the data
         """
-        # Extract core course attributes
+        # Extract core course attributes and convert date strings to date objects
         core_attrs = {
             "id": course_data["id"],
             "name": course_data["name"],
             "description": course_data["description"],
             "code": course_data["code"],
-            "start_date": course_data["start_date"],
-            "end_date": course_data["end_date"],
+            "start_date": date.fromisoformat(course_data["start_date"]),
+            "end_date": date.fromisoformat(course_data["end_date"]),
         }
-        core_attrs["start_date"] = date.fromisoformat(core_attrs["start_date"])
-        core_attrs["end_date"] = date.fromisoformat(core_attrs["end_date"])
 
         # Create course instance
         course = Course(**core_attrs)
 
-        # Add tasks if they exist in the data
-        if "tasks" in course_data:
-            course.tasks = course_data["tasks"]
-        if "completed_tasks" in course_data:
-            course.completed_tasks = course_data["completed_tasks"]
+        # Add tasks and completed tasks if they exist in the data
+        course.tasks = course_data.get("tasks", [])
+        course.completed_tasks = course_data.get("completed_tasks", [])
 
         return course
 
