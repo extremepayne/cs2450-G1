@@ -2,8 +2,11 @@ import os
 import sys
 import tkinter as tk
 
-# Add parent directory to path
-sys.path.append(os.path.dirname(__file__))
+# Add project root and src to Python path
+project_root = os.path.dirname(os.path.dirname(__file__))
+src_path = os.path.join(project_root, "src")
+sys.path.append(project_root)
+sys.path.append(src_path)
 
 from gui.gui import TaskManagerGUI
 
