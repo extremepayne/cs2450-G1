@@ -54,10 +54,6 @@ class Task:
             + self.status
             + "}"
         )
-
-    def __getitem__():
-        """Make this object subscriptable"""
-        pass
     
     @staticmethod
     def create_task(
