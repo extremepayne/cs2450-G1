@@ -164,17 +164,17 @@ class TaskManagerGUI:
         filtered_tasks = [
             task
             for task in self.all_tasks
-            if course == "All Courses" or task[2] == course
+            if course == "All Courses" or task.course_id == course
         ]
 
         # Display filtered tasks
         for task in filtered_tasks:
             task_item = TaskItem(
                 self.task_container,
-                task[0],
-                task[1],
-                task[2],
-                task[3],
+                task.title,
+                task.description,
+                task.course_id,
+                task.due_date,
                 delete_callback=self.delete_task,
                 edit_callback=self.edit_task,
             )

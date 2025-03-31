@@ -54,7 +54,7 @@ class Task:
             + self.status
             + "}"
         )
-
+    
     @staticmethod
     def create_task(
         task_id: int, title: str, description: str, due_date: date, course_id: int
