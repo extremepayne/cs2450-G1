@@ -40,19 +40,9 @@ class Task:
     def __str__(self):
         """Returns human-readable string for print() functions"""
         return (
-            "{"
-            + str(self.task_id)
-            + ", "
-            + self.title
-            + ", "
-            + self.description
-            + ", "
-            + self.due_date.strftime("%Y/%m/%d")
-            + ", "
-            + str(self.course_id)
-            + ", "
-            + self.status
-            + "}"
+            f"{{task_id: {self.task_id}, title: {self.title}, "
+            f"description: {self.description}, due_date: {self.due_date.strftime('%Y/%m/%d')}, "
+            f"course_id: {self.course_id}, status: {self.status}}}"
         )
 
     @staticmethod
@@ -129,18 +119,7 @@ class Task:
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
-                tasks = [
-                    cls(
-                        task_id=task["task_id"],
-                        title=task["title"],
-                        description=task["description"],
-                        due_date=date.fromisoformat(task["due_date"]),
-                        course_id=task["course_id"],
-                        status=task["status"],
-                    )
-                    for task in tasks_data
-                ]
-                return tasks
+                return [cls.from_dict(task) for task in tasks_data]
         except FileNotFoundError:
             return []
 
