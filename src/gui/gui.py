@@ -55,7 +55,7 @@ class TaskManagerGUI:
 
     def save_tasks(self):
         self.course_list.save_courses()
-
+    """
     def save_new_course(self, course_data):
         try:
             # Generate a new course ID (simple increment for now)
@@ -90,6 +90,7 @@ class TaskManagerGUI:
 
         except ValueError as e:
             messagebox.showerror("Error", str(e))
+    """
 
     def add_new_course(self):
         """Add a new course and display it in the course list"""
