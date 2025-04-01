@@ -44,7 +44,7 @@ class Task:
             f"description: {self.description}, due_date: {self.due_date.strftime('%Y/%m/%d')}, "
             f"course_id: {self.course_id}, status: {self.status}}}"
         )
-
+    
     @staticmethod
     def create_task(
         task_id: int, title: str, description: str, due_date: date, course_id: int

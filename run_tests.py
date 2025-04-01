@@ -1,4 +1,9 @@
 import unittest
+import os
+import sys
+
+# Add src directory to Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
 
 
 # runs all tests in the test directory with the right naming convention
