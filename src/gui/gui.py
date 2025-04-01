@@ -4,6 +4,7 @@ import sys
 import os
 from datetime import datetime, timedelta, date
 
+
 # Add src directory to Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 src_dir = os.path.dirname(current_dir)
@@ -324,7 +325,7 @@ class TaskManagerGUI:
         except Exception as e:
             # Fallback to text button if image fails to load
             menu_button = CustomButton(
-                self.nav_bar, text="Filter", command=toggle_filter_menu
+                self.nav_bar, text="Filter", command=self.toggle_filter_menu
             )
             menu_button.pack(side=tk.LEFT, padx=10, pady=10)
 
