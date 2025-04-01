@@ -133,5 +133,5 @@ class EditTaskView(tk.Toplevel):
                 "status": self.status_var.get(),
                 "course": self.course_var.get(),
             }
-            self.save_callback(task_data)
+            self.save_callback(task_data, self.task_data["name"])
         self.destroy()
