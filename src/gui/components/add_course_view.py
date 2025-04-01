@@ -73,7 +73,13 @@ class AddCourseView(tk.Toplevel):
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
         self.start_cal = Calendar(
-            main_container, selectmode="day", date_pattern="yyyy-mm-dd"
+            main_container,
+            selectmode="day",
+            date_pattern="yyyy-mm-dd",
+            foreground="black",
+            background="white",
+            headersbackground="white",
+            normalbackground="white",
         )
         self.start_cal.grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
@@ -82,7 +88,13 @@ class AddCourseView(tk.Toplevel):
             row=5, column=0, padx=5, pady=5, sticky="e"
         )
         self.end_cal = Calendar(
-            main_container, selectmode="day", date_pattern="yyyy-mm-dd"
+            main_container,
+            selectmode="day",
+            date_pattern="yyyy-mm-dd",
+            foreground="black",
+            background="white",
+            headersbackground="white",
+            normalbackground="white",
         )
         self.end_cal.grid(row=5, column=1, padx=5, pady=5, sticky="w")
 
