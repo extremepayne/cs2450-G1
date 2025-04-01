@@ -78,13 +78,22 @@ class CourseManager:
         for course in self.courses:
             print(f"ID: {course['id']}, Name: {course['name']}, Code: {course['code']}")
 
-    def delete_course(self, task_manager: "TaskManager") -> None:
-        """Deletes a course and its associated tasks."""
+    def delete_course(self) -> int:
+        """Deletes a course and returns the ID of the deleted course."""
         course_id = int(input("Enter course ID to delete: "))
-        self.courses = [course for course in self.courses if course["id"] != course_id]
-        task_manager.delete_tasks_by_course(course_id)
+        deleted_course_id = None
+        self.courses = [
+            course
+            for course in self.courses
+            if not (course["id"] == course_id and (deleted_course_id := course_id))
+        ]
         self.data_manager.save_courses(self.courses)
-        print("Course and associated tasks deleted successfully.")
+        if deleted_course_id is not None:
+            print("Course deleted successfully.")
+            return deleted_course_id
+        else:
+            print("Course not found.")
+            return None
 
     def edit_course(self) -> None:
         """Edits an existing course."""
@@ -256,7 +265,7 @@ class CLI:
             "-h": self.help,
             "-cc": self.course_manager.create_course,
             "-lc": self.course_manager.list_courses,
-            "-dc": lambda: self.course_manager.delete_course(self.task_manager),
+            "-dc": self.delete_course_and_tasks,
             "-ec": self.course_manager.edit_course,
             "-ct": lambda: self.task_manager.create_task(self.course_manager),
             "-lt": self.task_manager.list_tasks,
@@ -309,6 +318,13 @@ class CLI:
                 continue
             break
         self.task_manager.filter_tasks_by_course(course_id)
+
+    def delete_course_and_tasks(self) -> None:
+        """Deletes a course and its associated tasks."""
+        deleted_course_id = self.course_manager.delete_course()
+        if deleted_course_id is not None:
+            self.task_manager.delete_tasks_by_course(deleted_course_id)
+            print("Course and associated tasks deleted successfully.")
 
     def run(self) -> None:
         """Parses command-line arguments and executes the corresponding command."""
