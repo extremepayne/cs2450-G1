@@ -62,9 +62,19 @@ class AddTaskView(tk.Toplevel):
         self.name_entry = tk.Entry(main_container, width=40)
         self.name_entry.grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
-        # Due date - replace the existing due date entry with Calendar
-        tk.Label(main_container, text="Due Date:").grid(
+        # Course selection (moved up after task name)
+        tk.Label(main_container, text="Course:").grid(
             row=2, column=0, padx=5, pady=5, sticky="e"
+        )
+        self.course_dropdown = ttk.Combobox(
+            main_container, textvariable=self.course_var
+        )
+        self.course_dropdown["values"] = ["Choose a Course"]
+        self.course_dropdown.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+
+        # Due date
+        tk.Label(main_container, text="Due Date:").grid(
+            row=3, column=0, padx=5, pady=5, sticky="e"
         )
         self.due_date_cal = Calendar(
             main_container,
@@ -75,20 +85,14 @@ class AddTaskView(tk.Toplevel):
             headersbackground="white",
             normalbackground="white",
         )
-        self.due_date_cal.grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        self.due_date_cal.grid(row=3, column=1, padx=5, pady=5, sticky="w")
 
         # Description
         tk.Label(main_container, text="Description:").grid(
-            row=3, column=0, padx=5, pady=5, sticky="e"
-        )
-        self.description_text = tk.Text(main_container, width=30, height=5)
-        self.description_text.grid(row=3, column=1, padx=5, pady=5, sticky="w")
-
-        # Course selection (add before Status)
-        tk.Label(main_container, text="Course:").grid(
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
-        self.course_dropdown.grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        self.description_text = tk.Text(main_container, width=30, height=5)
+        self.description_text.grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
         # Status (move to row 5)
         tk.Label(main_container, text="Status:").grid(
