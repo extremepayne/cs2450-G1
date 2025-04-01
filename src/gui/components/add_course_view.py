@@ -3,15 +3,14 @@ from tkinter import *
 from datetime import date
 from tkinter import messagebox
 from .custom_button import CustomButton
-
-# from tkcalendar import Calendar # Add tkcalendar for date input
+from tkcalendar import Calendar
 
 
 class AddCourseView(tk.Toplevel):
     def __init__(self, parent, save_callback=None):
         super().__init__(parent)
         self.title("Add Course")
-        self.geometry("600x450")
+        self.geometry("600x700")
         self.save_callback = save_callback
 
         # Create entry fields
@@ -70,18 +69,22 @@ class AddCourseView(tk.Toplevel):
         self.description_text.grid(row=3, column=1, padx=5, pady=5, sticky="w")
 
         # Start date
-        tk.Label(main_container, text="Start Date (YYYY-MM-DD):").grid(
+        tk.Label(main_container, text="Start Date:").grid(
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
-        self.start_date_entry = tk.Entry(main_container, width=40)
-        self.start_date_entry.grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        self.start_cal = Calendar(
+            main_container, selectmode="day", date_pattern="yyyy-mm-dd"
+        )
+        self.start_cal.grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
         # End date
-        tk.Label(main_container, text="End Date (YYYY-MM-DD):").grid(
+        tk.Label(main_container, text="End Date:").grid(
             row=5, column=0, padx=5, pady=5, sticky="e"
         )
-        self.end_date_entry = tk.Entry(main_container, width=40)
-        self.end_date_entry.grid(row=5, column=1, padx=5, pady=5, sticky="w")
+        self.end_cal = Calendar(
+            main_container, selectmode="day", date_pattern="yyyy-mm-dd"
+        )
+        self.end_cal.grid(row=5, column=1, padx=5, pady=5, sticky="w")
 
         # Buttons
         button_frame = tk.Frame(main_container)
@@ -106,33 +109,12 @@ class AddCourseView(tk.Toplevel):
                 messagebox.showinfo("Error", "Course code cannot be empty")
                 raise ValueError("Course code cannot be empty")
 
-            if not self.start_date_entry.get():
-                messagebox.showinfo("Error", "Start date cannot be empty")
-                raise ValueError("Start date cannot be empty")
-            try:
-                start_date = date.fromisoformat(self.start_date_entry.get())
-            except ValueError:
-                messagebox.showinfo(
-                    "Error",
-                    f"{self.start_date_entry.get()} is not a valid YYYY-MM-DD date",
-                )
-                raise ValueError(
-                    f"{self.start_date_entry.get()} is not a valid YYYY-MM-DD date"
-                )
+            start_date = date.fromisoformat(self.start_cal.get_date())
+            end_date = date.fromisoformat(self.end_cal.get_date())
 
-            if not self.end_date_entry.get():
-                messagebox.showinfo("Error", "End date cannot be empty")
-                raise ValueError("End date cannot be empty")
-            try:
-                end_date = date.fromisoformat(self.end_date_entry.get())
-            except ValueError:
-                messagebox.showinfo(
-                    "Error",
-                    f"{self.end_date_entry.get()} is not a valid YYYY-MM-DD date",
-                )
-                raise ValueError(
-                    f"{self.end_date_entry.get()} is not a valid YYYY-MM-DD date"
-                )
+            if start_date > end_date:
+                messagebox.showinfo("Error", "End date must be after start date")
+                raise ValueError("End date must be after start date")
 
             course_data = {
                 "name": self.name_entry.get(),
