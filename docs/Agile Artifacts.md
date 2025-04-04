@@ -18,6 +18,14 @@
 
 ![zenhub screenshot 3](images/zenhub-screenshot-feb-20.png)
 
+#### 2/20/25
+
+![zenhub screenshot 4](images/zenhub-screenshot-feb-28.png)
+
+#### 4/4/25
+
+![zenhub screenshot 5](images/zenhub-screenshot-apr-04.png)
+
 ## Github URL
 
 [https://github.com/extremepayne/cs2450-G1](https://github.com/extremepayne/cs2450-G1)
