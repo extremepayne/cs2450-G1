@@ -1,6 +1,10 @@
 # Task Manager
 This is a task manager for students.
 
+# Requirements
+tkcalendar is required for the application to work.
+- If your computer does not have tkcalendar installed, install it from a terminal (such as Windows Powershell) by typing `pip install tkcalendar`
+
 # Features
 - Create, read, update and delete tasks
 

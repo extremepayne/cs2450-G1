@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import filedialog  # Add this import at the top of the file
 import sys
 import os
 from datetime import datetime, timedelta, date
+import json
 
 
 # Add src directory to Python path
@@ -354,6 +356,12 @@ class TaskManagerGUI:
         )
         add_course_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
+        # Add Export Tasks Button
+        export_tasks_button = CustomButton(
+            self.nav_bar, text="Export Tasks", command=self.export_tasks
+        )
+        export_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
+
         # Create a container for tasks below the nav bar
         self.task_container = tk.Frame(self.root, bg="#E6E6E6")
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
@@ -477,6 +485,24 @@ class TaskManagerGUI:
             save_callback=self.save_changes,
         )
         edit_window.grab_set()
+
+    def export_tasks(self):
+        """Export tasks to a custom directory as a JSON file."""
+        # Open a directory selection dialog
+        directory = filedialog.askdirectory(title="Select Export Directory")
+        if not directory:
+            return  # User canceled the dialog
+
+        # Define the export file path
+        export_file = os.path.join(directory, "tasks.json")
+
+        try:
+            # Save tasks to the selected directory
+            with open(export_file, "w") as file:
+                json.dump([task.to_dict() for task in self.all_tasks], file, indent=4)
+            messagebox.showinfo("Success", f"Tasks exported successfully to {export_file}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to export tasks: {str(e)}")
 
 
 def main():
