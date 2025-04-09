@@ -265,7 +265,19 @@ class TaskManagerGUI:
             for task in self.all_tasks
             if course == "All Courses" or task.course_id == course
         ]
-        self.display_filtered_tasks(filtered_tasks)
+
+        # Display filtered tasks
+        for task in filtered_tasks:
+            task_item = TaskItem(
+                self.task_container,
+                task.title,
+                task.description,
+                task.course_id,
+                task.due_date,
+                delete_callback=self.delete_task,
+                edit_callback=self.edit_task,
+            )
+            task_item.pack(fill="x", padx=5, pady=5)
 
     def display_filtered_tasks(self, filtered_tasks):
         # Display filtered tasks
@@ -285,7 +297,7 @@ class TaskManagerGUI:
         if self.filter_menu.winfo_ismapped():
             self.filter_menu.pack_forget()
         else:
-            self.filter_menu.pack(after=nav_bar, fill="x")
+            self.filter_menu.pack(after=self.nav_bar, fill="x")
 
     def setup_gui(self):
         # Create filter menu with reference to self
