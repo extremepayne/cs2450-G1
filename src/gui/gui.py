@@ -57,6 +57,7 @@ class TaskManagerGUI:
 
     def save_tasks(self):
         self.course_list.save_courses()
+
     """
     def save_new_course(self, course_data):
         try:
@@ -500,7 +501,9 @@ class TaskManagerGUI:
             # Save tasks to the selected directory
             with open(export_file, "w") as file:
                 json.dump([task.to_dict() for task in self.all_tasks], file, indent=4)
-            messagebox.showinfo("Success", f"Tasks exported successfully to {export_file}")
+            messagebox.showinfo(
+                "Success", f"Tasks exported successfully to {export_file}"
+            )
         except Exception as e:
             messagebox.showerror("Error", f"Failed to export tasks: {str(e)}")
 

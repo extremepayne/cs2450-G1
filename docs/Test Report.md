@@ -104,9 +104,9 @@
 * Test for invalid `course_id` for `task()` confirms the id is an invalid number (`-1`) instead of throwing errors (minor concern).
   * Should be fine as `-1` does indicate errors
 
-  ## Integration Testing
+## Integration Testing
 
-  # Integration Test Report
+# Integration Test Report
 
 ## Course-Task Integration Tests
 
@@ -168,3 +168,54 @@
 - Python 3.12+
 - tkinter for GUI
 - JSON files for persistence
+
+## System Testing
+
+### Application Restart Test
+- Purpose: Verify data persistence across application restarts
+- Method: Create course/task data, restart app, verify data restored
+- Results: 
+  - Course data successfully preserved
+  - Task data successfully preserved
+  - All relationships maintained
+  - Test passed
+
+### Performance Testing
+- Purpose: Verify task creation meets performance requirements
+- Method: Measure time to create and save task
+- Requirement: Under 500ms
+- Results:
+  - Task creation consistently under 500ms
+  - No performance bottlenecks identified
+  - Test passed
+
+### System Clock Synchronization
+- Purpose: Verify application properly syncs with system clock
+- Method: Create task, verify date handling
+- Results:
+  - Task dates correctly sync with system
+  - Date operations working as expected
+  - Test passed
+
+### Error Recovery
+- Purpose: Test application resilience with corrupted files
+- Method: Corrupt JSON files, verify application recovery
+- Results:
+  - Application successfully handles corrupted course file
+  - Clean recovery with empty course list
+  - No crash or data loss
+  - Test passed
+
+### System Test Environment
+- Hardware: MacBook Pro M1
+- OS: macOS Sonoma 14.2.1
+- Python: 3.12+
+- Libraries: tkinter, unittest
+- Storage: Local JSON files
+
+### Overall System Test Results
+- All system tests passed successfully
+- Data persistence working reliably
+- Performance requirements met
+- Error handling functioning as designed
+- No critical issues found

@@ -137,10 +137,14 @@ class CourseList:
         """
         try:
             with open(COURSE_FILE, "r") as file:
-                courses_data = json.load(file)
-                return [
-                    self._create_course_from_dict(course) for course in courses_data
-                ]
+                try:
+                    courses_data = json.load(file)
+                    return [
+                        self._create_course_from_dict(course) for course in courses_data
+                    ]
+                except json.JSONDecodeError:
+                    # If JSON is corrupted, return empty list
+                    return []
         except FileNotFoundError:
             return []
 
