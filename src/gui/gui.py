@@ -28,8 +28,8 @@ src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if src_dir not in sys.path:
     sys.path.append(src_dir)
 
-from course import Course, CourseList
-from task import Task
+from ..course import Course, CourseList
+from ..task import Task
 
 
 def resize_image(image_path, width, height):
@@ -206,7 +206,7 @@ class TaskManagerGUI:
                     task_id=self.next_task_id,
                     title=task_data["name"],
                     description=task_data["description"],
-                    due_date=date.fromisoformat(task_data["due_date"]),
+                    due_date=task_data["due_date"],
                     course_id=task_data["course"],
                     status=task_data["status"],
                 )
@@ -497,7 +497,9 @@ class TaskManagerGUI:
         try:
             # Call the export_tasks function from task.py
             Task.export_tasks(self.all_tasks, directory)
-            messagebox.showinfo("Success", f"Tasks exported successfully to {directory}")
+            messagebox.showinfo(
+                "Success", f"Tasks exported successfully to {directory}"
+            )
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 

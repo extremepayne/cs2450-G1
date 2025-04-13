@@ -1,14 +1,12 @@
 import os
 import sys
+
+# Add the src directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(current_dir))
+
+from src.gui.gui import TaskManagerGUI
 import tkinter as tk
-
-# Add project root and src to Python path
-project_root = os.path.dirname(os.path.dirname(__file__))
-src_path = os.path.join(project_root, "src")
-sys.path.append(project_root)
-sys.path.append(src_path)
-
-from gui.gui import TaskManagerGUI
 
 
 def main():
