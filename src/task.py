@@ -1,4 +1,5 @@
 import json
+import os
 from typing import List, Dict, Any
 from datetime import date
 
@@ -160,3 +161,28 @@ class Task:
             status=data["status"],
         )
         return core_attrs
+
+    @staticmethod
+    def export_tasks(tasks: List["Task"], directory: str) -> None:
+        """
+        Export tasks to a custom directory as a JSON file.
+
+        Args:
+            tasks (List[Task]): List of Task objects to export.
+            directory (str): Directory where the tasks will be exported.
+
+        Raises:
+            ValueError: If the directory is invalid or export fails.
+        """
+        if not os.path.isdir(directory):
+            raise ValueError(f"Invalid directory: {directory}")
+
+        # Define the export file path
+        export_file = os.path.join(directory, "tasks.json")
+
+        try:
+            # Save tasks to the selected directory
+            with open(export_file, "w") as file:
+                json.dump([task.to_dict() for task in tasks], file, indent=4)
+        except Exception as e:
+            raise ValueError(f"Failed to export tasks: {str(e)}")

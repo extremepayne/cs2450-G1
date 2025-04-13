@@ -494,18 +494,12 @@ class TaskManagerGUI:
         if not directory:
             return  # User canceled the dialog
 
-        # Define the export file path
-        export_file = os.path.join(directory, "tasks.json")
-
         try:
-            # Save tasks to the selected directory
-            with open(export_file, "w") as file:
-                json.dump([task.to_dict() for task in self.all_tasks], file, indent=4)
-            messagebox.showinfo(
-                "Success", f"Tasks exported successfully to {export_file}"
-            )
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to export tasks: {str(e)}")
+            # Call the export_tasks function from task.py
+            Task.export_tasks(self.all_tasks, directory)
+            messagebox.showinfo("Success", f"Tasks exported successfully to {directory}")
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
 
 
 def main():
