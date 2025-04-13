@@ -57,6 +57,7 @@ class TaskManagerGUI:
 
     def save_tasks(self):
         self.course_list.save_courses()
+
     """
     def save_new_course(self, course_data):
         try:
