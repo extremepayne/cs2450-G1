@@ -502,7 +502,9 @@ class TaskManagerGUI:
         try:
             # Call the export_tasks function from task.py
             Task.export_tasks(self.all_tasks, directory)
-            messagebox.showinfo("Success", f"Tasks exported successfully to {directory}")
+            messagebox.showinfo(
+                "Success", f"Tasks exported successfully to {directory}"
+            )
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
