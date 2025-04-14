@@ -511,6 +511,9 @@ class TaskManagerGUI:
         file = filedialog.askopenfile(title="Select file to import")
         if file is None:
             return # user canceled the dialog
+        if not file.name.endswith(".json"):
+            messagebox.showerror("Error", "File is not a JSON file.")
+            return
         try:
             Task.load_tasks_from_file(file)
             messagebox.showinfo("Success", "Tasks imported successfully")
