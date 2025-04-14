@@ -363,6 +363,11 @@ class TaskManagerGUI:
         )
         export_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
+        import_tasks_button = CustomButton(
+            self.nav_bar, text="Import Tasks", command=self.import_tasks
+        )
+        import_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
+
         # Create a container for tasks below the nav bar
         self.task_container = tk.Frame(self.root, bg="#E6E6E6")
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
