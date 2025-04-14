@@ -1,6 +1,6 @@
 import json
 import os
-from typing import List, Dict, Any
+from typing import List, Dict, Any, IO
 from datetime import date
 
 TASK_FILE = "tasks.json"
@@ -124,6 +124,15 @@ class Task:
         except FileNotFoundError:
             return []
 
+    @classmethod
+    def load_tasks_from_file(cls, file: IO) -> List["Task"]:
+        """Load tasks from specified JSON file"""
+        try:
+            tasks_data = json.load(file)
+            return [cls.from_dict(task) for task in tasks_data]
+        except FileNotFoundError:
+            return []
+
     @staticmethod
     def save_tasks(tasks: List["Task"]) -> None:
         """Save tasks to JSON file"""
@@ -145,22 +154,25 @@ class Task:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Task":
         """Create Task instance from dictionary"""
-        # Convert due_date string to date object
-        due_date_str = data["due_date"]
-        if isinstance(due_date_str, str):
-            due_date = date.fromisoformat(due_date_str)
-        else:
-            due_date = due_date_str
-
-        core_attrs = cls(
-            task_id=data["task_id"],
-            title=data["title"],
-            description=data["description"],
-            due_date=due_date,
-            course_id=data["course_id"],
-            status=data["status"],
-        )
-        return core_attrs
+        try:
+            # Convert due_date string to date object
+            due_date_str = data["due_date"]
+            if isinstance(due_date_str, str):
+                due_date = date.fromisoformat(due_date_str)
+            else:
+                due_date = due_date_str
+    
+            core_attrs = cls(
+                task_id=data["task_id"],
+                title=data["title"],
+                description=data["description"],
+                due_date=due_date,
+                course_id=data["course_id"],
+                status=data["status"],
+            )
+            return core_attrs
+        except:
+            raise ValueError("JSON file has unsupported or missing attributes")
 
     @staticmethod
     def export_tasks(tasks: List["Task"], directory: str) -> None:
