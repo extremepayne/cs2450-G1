@@ -501,6 +501,18 @@ class TaskManagerGUI:
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
+    def import_tasks(self):
+        """Import tasks from a user-selected JSON file."""
+        file = filedialog.askopenfile(title="Select file to import")
+        if file is None:
+            return # user canceled the dialog
+        try:
+            Task.load_tasks_from_file(file)
+            messagebox.showinfo("Success", "Tasks imported successfully")
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+
+
 
 def main():
     root = tk.Tk()
