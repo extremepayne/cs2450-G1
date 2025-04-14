@@ -161,7 +161,7 @@ class Task:
                 due_date = date.fromisoformat(due_date_str)
             else:
                 due_date = due_date_str
-    
+
             core_attrs = cls(
                 task_id=data["task_id"],
                 title=data["title"],

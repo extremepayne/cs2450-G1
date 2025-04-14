@@ -512,7 +512,7 @@ class TaskManagerGUI:
         """Import tasks from a user-selected JSON file."""
         file = filedialog.askopenfile(title="Select file to import")
         if file is None:
-            return # user canceled the dialog
+            return  # user canceled the dialog
         if not file.name.endswith(".json"):
             messagebox.showerror("Error", "File is not a JSON file.")
             return
@@ -521,7 +521,6 @@ class TaskManagerGUI:
             messagebox.showinfo("Success", "Tasks imported successfully")
         except ValueError as e:
             messagebox.showerror("Error", str(e))
-
 
 
 def main():
