@@ -28,8 +28,8 @@ src_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if src_dir not in sys.path:
     sys.path.append(src_dir)
 
-from course import Course, CourseList
-from task import Task
+from ..course import Course, CourseList
+from ..task import Task
 
 
 def resize_image(image_path, width, height):
@@ -206,7 +206,7 @@ class TaskManagerGUI:
                     task_id=self.next_task_id,
                     title=task_data["name"],
                     description=task_data["description"],
-                    due_date=date.fromisoformat(task_data["due_date"]),
+                    due_date=task_data["due_date"],
                     course_id=task_data["course"],
                     status=task_data["status"],
                 )
@@ -519,6 +519,7 @@ class TaskManagerGUI:
         try:
             Task.load_tasks_from_file(file)
             messagebox.showinfo("Success", "Tasks imported successfully")
+
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 

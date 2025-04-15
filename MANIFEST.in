@@ -1,0 +1,4 @@
+include src/gui/assets/*
+include README.md
+include requirements.txt
+include *.json
