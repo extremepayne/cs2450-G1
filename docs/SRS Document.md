@@ -1,11 +1,3 @@
-# 
-
-# 
-
-# 
-
-# 
-
 # Software Requirements Specification
 
 Curtis Airmet  
