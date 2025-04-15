@@ -38,6 +38,8 @@ Story 17: As a parent, I want to help my child to be organized so that they won�
 
 Story 18: As a student, I want to be able to customize my schedule to my specific needs so that I can have an easier time with my schoolwork.
 
+Story 19: As someone who works with multiple OSes, I want an application that supports all major OSes along with import/export functionality so I can take my tasks with me across devices.
+
 ## Use Cases
 
 Some use cases include:
@@ -99,6 +101,8 @@ Creating or updating a task should save within 500ms
 Deleting a task should be persistent (users should never see “ghost tasks”)
 
 Minimal task creation should take three clicks/taps or less
+
+Application should have versions for Windows, Linux, and Mac
 
 ## UI Requirements
 
