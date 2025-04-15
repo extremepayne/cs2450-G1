@@ -110,7 +110,7 @@ class CourseManager:
         Deletes a course
 
         Returns:
-            ID of the deleted course.
+            int: ID of the deleted course.
         """
         course_id = int(input("Enter course ID to delete: "))
         deleted_course_id = None
@@ -156,7 +156,7 @@ class CourseManager:
         Gets a list of all course IDs.
 
         Returns:
-            List of course IDs.
+            List[int]: list of course IDs.
         """
         return [course["id"] for course in self.courses]
 

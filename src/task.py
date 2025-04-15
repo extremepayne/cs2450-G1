@@ -1,13 +1,3 @@
-"""
-description
-
-Args:
-    -
-
-Returns:
-    -
-"""
-
 import json
 import os
 from typing import List, Dict, Any, IO
@@ -48,8 +38,13 @@ class Task:
         self.course_id: int = course_id
         self.status: str = status
 
-    def __str__(self):
-        """Returns human-readable string for print() functions"""
+    def __str__(self) -> str:
+        """
+        Creates string format for Task.
+
+        Returns:
+            str: human-readable string for print() functions
+        """
         return (
             f"{{task_id: {self.task_id}, title: {self.title}, "
             f"description: {self.description}, due_date: {self.due_date.strftime('%Y/%m/%d')}, "
@@ -130,7 +125,7 @@ class Task:
         Load tasks from the JSON file.
 
         Returns:
-            List of Task objects.
+            List["Task"]: List of Task objects.
         """
 
         try:
@@ -149,7 +144,7 @@ class Task:
             file (IO): opened file for writing to.
 
         Returns:
-            List of Task objects.
+            List["Task"]: List of Task objects.
         """
 
         try:
@@ -171,7 +166,12 @@ class Task:
             json.dump(tasks_data, file, indent=4)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert task to dictionary format"""
+        """
+        Convert task to dictionary format
+
+        Returns:
+            Dict[str, Any]: task in dictionary format
+        """
         return {
             "task_id": self.task_id,
             "title": self.title,
@@ -183,7 +183,15 @@ class Task:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "Task":
-        """Create Task instance from dictionary"""
+        """
+        Create Task instance from dictionary
+
+        Args:
+            data (Dict[str, Any]): dictionary form of Task
+
+        Returns:
+            Task: instance created from dictionary
+        """
         try:
             # Convert due_date string to date object
             due_date_str = data["due_date"]
