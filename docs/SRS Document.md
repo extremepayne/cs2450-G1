@@ -162,5 +162,5 @@ Minimal task creation should take three clicks/taps or less
 
 ### UML Class Diagram
 
-![Class Diagram](images/UML_classs_diagram.webp)
+![Class Diagram](images/UML_class_diagram.webp)
 

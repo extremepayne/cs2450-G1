@@ -363,6 +363,11 @@ class TaskManagerGUI:
         )
         export_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
+        import_tasks_button = CustomButton(
+            self.nav_bar, text="Import Tasks", command=self.import_tasks
+        )
+        import_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
+
         # Create a container for tasks below the nav bar
         self.task_container = tk.Frame(self.root, bg="#E6E6E6")
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
@@ -500,6 +505,21 @@ class TaskManagerGUI:
             messagebox.showinfo(
                 "Success", f"Tasks exported successfully to {directory}"
             )
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+
+    def import_tasks(self):
+        """Import tasks from a user-selected JSON file."""
+        file = filedialog.askopenfile(title="Select file to import")
+        if file is None:
+            return  # user canceled the dialog
+        if not file.name.endswith(".json"):
+            messagebox.showerror("Error", "File is not a JSON file.")
+            return
+        try:
+            Task.load_tasks_from_file(file)
+            messagebox.showinfo("Success", "Tasks imported successfully")
+
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
