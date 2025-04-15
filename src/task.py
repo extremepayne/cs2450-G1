@@ -1,3 +1,13 @@
+"""
+description
+
+Args:
+    -
+
+Returns:
+    -
+"""
+
 import json
 import os
 from typing import List, Dict, Any, IO
@@ -116,7 +126,13 @@ class Task:
 
     @classmethod
     def load_tasks(cls) -> List["Task"]:
-        """Load tasks from JSON file"""
+        """
+        Load tasks from the JSON file.
+
+        Returns:
+            List of Task objects.
+        """
+
         try:
             with open(TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
@@ -126,7 +142,16 @@ class Task:
 
     @classmethod
     def load_tasks_from_file(cls, file: IO) -> List["Task"]:
-        """Load tasks from specified JSON file"""
+        """
+        Load tasks from a specified JSON file.
+
+        Args:
+            file (IO): opened file for writing to.
+
+        Returns:
+            List of Task objects.
+        """
+
         try:
             tasks_data = json.load(file)
             return [cls.from_dict(task) for task in tasks_data]
@@ -135,7 +160,12 @@ class Task:
 
     @staticmethod
     def save_tasks(tasks: List["Task"]) -> None:
-        """Save tasks to JSON file"""
+        """
+        Save tasks to JSON file
+
+        Args:
+            tasks (List["Task"]): List of Task objects.
+        """
         tasks_data = [task.to_dict() for task in tasks]
         with open(TASK_FILE, "w") as file:
             json.dump(tasks_data, file, indent=4)
