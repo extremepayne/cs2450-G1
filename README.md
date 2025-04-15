@@ -1,9 +1,11 @@
 # Task Manager
 This is a task manager for students.
 
+# Installation
+Download the corresponding .zip file for your system, extract it, and open up the TaskManager app found inside of it.
+
 # Requirements
-`tkcalendar` is required for the application to work.
-- If your computer does not have tkcalendar installed, install it from a terminal (such as Windows Powershell) by typing `pip install tkcalendar`
+For MacOS, this application is built specifically for Apple Silicon processors and is not compatible with Intel-based Macs.
 
 # Features
 
