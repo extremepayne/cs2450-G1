@@ -47,7 +47,7 @@ Chun Poon
 - Be able to save their changes, and load them at a later time
 
 2.4. Operating Environment  
-The Task Manager program is designed to work on Windows, MacOS and Linux. The program runs locally on the user’s system, and requires no internet connection to operate correctly.
+The Task Manager program is designed to work on Windows, MacOS and Linux. For MacOS, the program is designed for Apple Silicon processors, meaning a MacOS with an intel processor will not be able to run the program. The program runs locally on the user’s system, and requires no internet connection to operate correctly.
 
 2.5. Design and Implementation Constraints
 
