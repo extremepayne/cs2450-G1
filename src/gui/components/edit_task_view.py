@@ -9,7 +9,7 @@ class EditTaskView(tk.Toplevel):
     def __init__(self, parent, task_id, task_data=None, save_callback=None):
         super().__init__(parent)
         self.title("Edit Task")
-        self.geometry("600x450")
+        self.geometry("600x500")
         self.task_id = task_id
         self.task_data = task_data
         self.save_callback = save_callback
@@ -106,7 +106,6 @@ class EditTaskView(tk.Toplevel):
         # Populate fields if task_data exists
         if self.task_data:
             self.name_entry.insert(0, self.task_data["name"])
-            self.due_date_entry.insert(0, self.task_data["due_date"])
             self.description_text.insert("1.0", self.task_data["description"])
             self.status_var.set(self.task_data["status"])
             if "course" in self.task_data:
@@ -133,5 +132,5 @@ class EditTaskView(tk.Toplevel):
                 "status": self.status_var.get(),
                 "course": self.course_var.get(),
             }
-            self.save_callback(task_data, self.task_data["name"])
+            self.save_callback(task_data, self.task_id)
         self.destroy()

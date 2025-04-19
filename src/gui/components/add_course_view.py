@@ -10,7 +10,7 @@ class AddCourseView(tk.Toplevel):
     def __init__(self, parent, save_callback=None):
         super().__init__(parent)
         self.title("Add Course")
-        self.geometry("600x700")
+        self.geometry("600x650")
         self.save_callback = save_callback
 
         # Create entry fields
