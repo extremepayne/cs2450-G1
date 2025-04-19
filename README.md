@@ -7,6 +7,8 @@ Download the corresponding .zip file for your system, extract it, and open up th
 # Requirements
 For MacOS, this application is built specifically for Apple Silicon processors and is not compatible with Intel-based Macs.
 
+`tkcalendar` is required to run this application. If it is not installed on your computer, install it using an CLI application. (Windows users for example can open PowerShell and type `pip install tkcalendar`)
+
 # Features
 
 - Task Management
