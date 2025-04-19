@@ -23,7 +23,12 @@ class DataManager:
 
     @staticmethod
     def load_courses() -> List[Dict[str, Any]]:
-        """Loads courses from the JSON file."""
+        """
+        Loads courses from the JSON file.
+
+        Args:
+            courses (List[Dict[str, Any]]): list of courses
+        """
         try:
             with open(COURSE_FILE, "r") as file:
                 return json.load(file)
@@ -32,13 +37,23 @@ class DataManager:
 
     @staticmethod
     def save_courses(courses: List[Dict[str, Any]]) -> None:
-        """Saves courses to the JSON file."""
+        """
+        Saves courses to the JSON file.
+
+        Args:
+            courses (List[Dict[str, Any]]): list of courses
+        """
         with open(COURSE_FILE, "w") as file:
             json.dump(courses, file, indent=4)
 
     @staticmethod
     def load_tasks() -> List[Dict[str, Any]]:
-        """Loads tasks from the JSON file."""
+        """
+        Loads tasks from the JSON file.
+
+        Args:
+            tasks (List[Dict[str, Any]]): list of tasks
+        """
         try:
             with open(TASK_FILE, "r") as file:
                 return json.load(file)
@@ -47,7 +62,12 @@ class DataManager:
 
     @staticmethod
     def save_tasks(tasks: List[Dict[str, Any]]) -> None:
-        """Saves tasks to the JSON file."""
+        """
+        Saves tasks to the JSON file.
+
+        Args:
+            tasks (List[Dict[str, Any]]): list of tasks
+        """
         with open(TASK_FILE, "w") as file:
             json.dump(tasks, file, indent=4)
 
@@ -56,6 +76,13 @@ class CourseManager:
     """Manages course-related operations."""
 
     def __init__(self, data_manager: DataManager):
+        """
+        Initializes a CourseManager object.
+
+        Args:
+            data_manager (DataManager): manages loading and saving data
+        """
+
         self.data_manager = data_manager
         self.courses = data_manager.load_courses()
 
@@ -79,7 +106,12 @@ class CourseManager:
             print(f"ID: {course['id']}, Name: {course['name']}, Code: {course['code']}")
 
     def delete_course(self) -> int:
-        """Deletes a course and returns the ID of the deleted course."""
+        """
+        Deletes a course
+
+        Returns:
+            int: ID of the deleted course.
+        """
         course_id = int(input("Enter course ID to delete: "))
         deleted_course_id = None
         self.courses = [
@@ -120,7 +152,12 @@ class CourseManager:
         print("Course edited successfully.")
 
     def get_course_ids(self) -> List[int]:
-        """Returns a list of course IDs."""
+        """
+        Gets a list of all course IDs.
+
+        Returns:
+            List[int]: list of course IDs.
+        """
         return [course["id"] for course in self.courses]
 
 
@@ -128,11 +165,23 @@ class TaskManager:
     """Manages task-related operations."""
 
     def __init__(self, data_manager: DataManager):
+        """
+        Initializes a TaskManager object.
+
+        Args:
+            data_manager (DataManager): manages loading and saving data
+        """
+
         self.data_manager = data_manager
         self.tasks = data_manager.load_tasks()
 
     def create_task(self, course_manager: CourseManager) -> None:
-        """Creates a new task."""
+        """
+        Creates a new task.
+
+        Args:
+            course_manager (CourseManager): manager for courses
+        """
         course_ids = course_manager.get_course_ids()
 
         while True:
@@ -182,7 +231,13 @@ class TaskManager:
         print("Task deleted successfully.")
 
     def edit_task(self, course_manager: CourseManager) -> None:
-        """Edits an existing task."""
+        """
+        Edits an existing task.
+
+        Args:
+            course_manager (CourseManager): manager for courses
+        """
+
         while True:
             try:
                 task_id = int(input("Enter task ID to edit: "))
@@ -216,7 +271,13 @@ class TaskManager:
         print("Task edited successfully.")
 
     def filter_tasks_by_due_date(self, due_date: str) -> None:
-        """Filters tasks by due date."""
+        """
+        Filters tasks by due date.
+
+        Args:
+            due_date (str): due date to filter by.
+        """
+
         filtered_tasks = [task for task in self.tasks if task["due_date"] == due_date]
         for task in filtered_tasks:
             print(
@@ -224,7 +285,13 @@ class TaskManager:
             )
 
     def filter_tasks_by_course(self, course_id: int) -> None:
-        """Filters tasks by course ID."""
+        """
+        Filters tasks by course ID.
+
+        Args:
+            course_id (int): course ID
+        """
+
         filtered_tasks = [task for task in self.tasks if task["course_id"] == course_id]
         for task in filtered_tasks:
             print(
@@ -250,7 +317,13 @@ class TaskManager:
             )
 
     def delete_tasks_by_course(self, course_id: int) -> None:
-        """Deletes all tasks associated with a given course ID."""
+        """
+        Deletes all tasks associated with a given course ID.
+
+        Args:
+            course_id (int): course ID
+        """
+
         self.tasks = [task for task in self.tasks if task["course_id"] != course_id]
         self.data_manager.save_tasks(self.tasks)
 
