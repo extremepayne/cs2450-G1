@@ -426,11 +426,28 @@ class TaskManagerGUI:
             self.all_tasks = [
                 task for task in self.all_tasks if task.title != task_name
             ]
+
             # Save updated task list to JSON
             Task.save_tasks(self.all_tasks)
 
-            self.setup_gui()
-            return True  # Return True to trigger widget destruction
+            # Clear the task container
+            for widget in self.task_container.winfo_children():
+                widget.destroy()
+
+            # Redisplay all tasks
+            for task in self.all_tasks:
+                task_item = TaskItem(
+                    self.task_container,
+                    task.title,
+                    task.description,
+                    "CS 2450",  # TODO: Replace with actual course code if needed
+                    task.due_date,
+                    delete_callback=self.delete_task,
+                    edit_callback=self.edit_task,
+                )
+                task_item.pack(fill="x", padx=5, pady=5)
+
+            return True  # Return True to indicate successful deletion
         return False
 
     def save_changes(self, task_data, task_name):

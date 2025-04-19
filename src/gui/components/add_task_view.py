@@ -10,7 +10,7 @@ class AddTaskView(tk.Toplevel):
     def __init__(self, parent, save_callback=None):
         super().__init__(parent)
         self.title("Add Task")
-        self.geometry("600x450")
+        self.geometry("600x500")
         self.save_callback = save_callback
 
         # Course Dropdown
