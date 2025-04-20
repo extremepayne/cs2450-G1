@@ -450,38 +450,26 @@ class TaskManagerGUI:
             return True  # Return True to indicate successful deletion
         return False
 
-    def save_changes(self, task_data, task_name):
-        task_to_edit = next(
-            (task for task in self.all_tasks if task.title == task_name), None
-        )
+    def save_changes(self, updated_task_data, task_id):
+        """Save changes to a task and refresh the GUI."""
+        # Find the task to edit
+        task_to_edit = next((task for task in self.all_tasks if task.task_id == task_id), None)
         if not task_to_edit:
+            messagebox.showerror("Error", "Task not found.")
             return
 
         # Update task attributes
-        task_to_edit.title = task_data["name"]
-        task_to_edit.description = task_data["description"]
-        task_to_edit.due_date = task_data["due_date"]
-        task_to_edit.status = task_data["status"]
+        task_to_edit.title = updated_task_data["name"]
+        task_to_edit.description = updated_task_data["description"]
+        task_to_edit.due_date = updated_task_data["due_date"]
+        task_to_edit.status = updated_task_data["status"]
+        task_to_edit.course_id = updated_task_data["course"]
 
-        # Save to JSON
+        # Save updated tasks to JSON
         Task.save_tasks(self.all_tasks)
 
         # Refresh the task display
-        for widget in self.task_container.winfo_children():
-            widget.destroy()
-
-        # Redisplay all tasks
-        for task in self.all_tasks:
-            task_item = TaskItem(
-                self.task_container,
-                task.title,
-                task.description,
-                task_data["course"],  # Use selected course
-                task.due_date,
-                delete_callback=self.delete_task,
-                edit_callback=self.edit_task,
-            )
-            task_item.pack(fill="x", padx=5, pady=5)
+        self.refresh_task_list()
 
         messagebox.showinfo("Success", "Task updated successfully!")
 
@@ -492,9 +480,13 @@ class TaskManagerGUI:
             (task for task in self.all_tasks if task.title == task_name), None
         )
         if not task_to_edit:
+            messagebox.showerror("Error", "Task not found.")
             return
 
-        # Open edit window with current task data
+        # Get the current course list
+        course_codes = [course.code for course in self.course_list.courses]
+
+        # Open the edit task window with current task data
         edit_window = EditTaskView(
             self.root,
             task_id=task_to_edit.task_id,
@@ -503,8 +495,9 @@ class TaskManagerGUI:
                 "description": task_to_edit.description,
                 "due_date": task_to_edit.due_date,
                 "status": task_to_edit.status,
-                "course": "CS 2450",  # TODO: Get actual course
+                "course": task_to_edit.course_id,  # Pass the course ID
             },
+            course_list=course_codes,  # Pass the current course list
             save_callback=self.save_changes,
         )
         edit_window.grab_set()
@@ -539,6 +532,33 @@ class TaskManagerGUI:
 
         except ValueError as e:
             messagebox.showerror("Error", str(e))
+
+    def refresh_task_list(self):
+        """Clear and repopulate the task container with updated tasks."""
+        # Clear the task container
+        for widget in self.task_container.winfo_children():
+            widget.destroy()
+
+        # Redisplay all tasks
+        for task in self.all_tasks:
+            # Get the course code for the task
+            course = next(
+                (course for course in self.course_list.courses if course.id == task.course_id),
+                None,
+            )
+            course_code = course.code if course else "Unknown Course"
+
+            # Create and display the task item
+            task_item = TaskItem(
+                self.task_container,
+                task.title,
+                task.description,
+                course_code,
+                task.due_date,
+                delete_callback=self.delete_task,
+                edit_callback=self.edit_task,
+            )
+            task_item.pack(fill="x", padx=5, pady=5)
 
 
 def main():

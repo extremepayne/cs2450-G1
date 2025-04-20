@@ -21,3 +21,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def save_task(self):
+    """Collect updated task data and call the save callback."""
+    if self.save_callback:
+        task_data = {
+            "name": self.name_entry.get(),
+            "due_date": self.due_date_cal.get_date(),
+            "description": self.description_text.get("1.0", "end-1c"),
+            "status": self.status_var.get(),
+            "course": self.course_var.get(),
+        }
+        self.save_callback(task_data, self.task_id)  # Pass updated data and task ID
+    self.destroy()
