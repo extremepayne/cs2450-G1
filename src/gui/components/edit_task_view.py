@@ -121,6 +121,7 @@ class EditTaskView(tk.Toplevel):
         )
 
     def save_task(self):
+        """Collect updated task data and call the save callback."""
         if self.save_callback:
             task_data = {
                 "name": self.name_entry.get(),
@@ -129,5 +130,8 @@ class EditTaskView(tk.Toplevel):
                 "status": self.status_var.get(),
                 "course": self.course_var.get(),
             }
+            # Call the save callback to update the task
             self.save_callback(task_data, self.task_id)
+
+# Close the edit window
         self.destroy()

@@ -451,7 +451,7 @@ class TaskManagerGUI:
         return False
 
     def save_changes(self, updated_task_data, task_id):
-        """Save changes to a task and refresh the GUI."""
+        """Save changes to a task, reload tasks, and refresh the GUI."""
         # Find the task to edit
         task_to_edit = next((task for task in self.all_tasks if task.task_id == task_id), None)
         if not task_to_edit:
@@ -463,10 +463,19 @@ class TaskManagerGUI:
         task_to_edit.description = updated_task_data["description"]
         task_to_edit.due_date = updated_task_data["due_date"]
         task_to_edit.status = updated_task_data["status"]
-        task_to_edit.course_id = updated_task_data["course"]
+
+        # Update course_id based on the selected course code
+        course = next(
+            (course for course in self.course_list.courses if course.code == updated_task_data["course"]),
+            None,
+        )
+        task_to_edit.course_id = course.id if course else None
 
         # Save updated tasks to JSON
         Task.save_tasks(self.all_tasks)
+
+        # Reload tasks from JSON to ensure correct course data
+        self.all_tasks = Task.load_tasks()
 
         # Refresh the task display
         self.refresh_task_list()
