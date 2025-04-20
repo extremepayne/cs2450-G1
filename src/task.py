@@ -9,6 +9,9 @@ TASK_FILE = "tasks.json"
 class Task:
     """A class representing a task associated with a course."""
 
+    # Define the path to the tasks.json file
+    TASK_FILE = os.path.join(os.path.dirname(__file__), "tasks.json")
+
     def __init__(
         self,
         task_id: int,
@@ -116,13 +119,13 @@ class Task:
 
     @classmethod
     def load_tasks(cls) -> List["Task"]:
-        """Load tasks from JSON file"""
+        """Load tasks from JSON file."""
         try:
-            with open(TASK_FILE, "r") as file:
+            with open(Task.TASK_FILE, "r") as file:
                 tasks_data = json.load(file)
                 return [cls.from_dict(task) for task in tasks_data]
         except FileNotFoundError:
-            return []
+            return []  # Return an empty list if the file does not exist
 
     @classmethod
     def load_tasks_from_file(cls, file: IO) -> List["Task"]:
@@ -135,9 +138,9 @@ class Task:
 
     @staticmethod
     def save_tasks(tasks: List["Task"]) -> None:
-        """Save tasks to JSON file"""
+        """Save tasks to JSON file."""
         tasks_data = [task.to_dict() for task in tasks]
-        with open(TASK_FILE, "w") as file:
+        with open(Task.TASK_FILE, "w") as file:
             json.dump(tasks_data, file, indent=4)
 
     def to_dict(self) -> Dict[str, Any]:

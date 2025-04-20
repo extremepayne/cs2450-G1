@@ -534,18 +534,34 @@ class TaskManagerGUI:
 
     def import_tasks(self):
         """Import tasks from a user-selected JSON file."""
-        file = filedialog.askopenfile(title="Select file to import")
+        # Open a file selection dialog
+        file = filedialog.askopenfile(title="Select file to import", mode="r")
         if file is None:
-            return  # user canceled the dialog
+            return  # User canceled the dialog
+
         if not file.name.endswith(".json"):
             messagebox.showerror("Error", "File is not a JSON file.")
             return
-        try:
-            Task.load_tasks_from_file(file)
-            messagebox.showinfo("Success", "Tasks imported successfully")
 
-        except ValueError as e:
-            messagebox.showerror("Error", str(e))
+        try:
+            # Read the contents of the selected file
+            imported_tasks_data = json.load(file)
+            file.close()
+
+            # Overwrite the current tasks.json file
+            with open(Task.TASK_FILE, "w") as task_file:
+                json.dump(imported_tasks_data, task_file, indent=4)
+
+            # Reload tasks from the updated tasks.json file
+            self.all_tasks = Task.load_tasks()
+
+            # Refresh the task list in the GUI
+            self.refresh_task_list()
+
+            messagebox.showinfo("Success", "Tasks imported successfully!")
+
+        except (ValueError, json.JSONDecodeError) as e:
+            messagebox.showerror("Error", f"Failed to import tasks: {str(e)}")
 
     def refresh_task_list(self, tasks=None):
         """Clear and repopulate the task container with updated tasks."""
