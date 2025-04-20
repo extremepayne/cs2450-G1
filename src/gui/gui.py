@@ -313,33 +313,18 @@ class TaskManagerGUI:
             self.filter_menu.pack(after=self.nav_bar, fill="x")
 
     def setup_gui(self):
+        """Set up the GUI components."""
         # Create filter menu with reference to self
         self.filter_menu = MenuWindow(self.root, self.apply_filters)
 
         # Update the filter menu course list
         self.update_course_filters()
 
-        #### This function goes unused. Delete if unneeded
-        # def edit_task(task_id):
-        #     def save_changes(task_data):
-        #         print(f"Saving changes for task {task_id}: {task_data}")
-        #         # Implement other saving logic here
-
-        def edit_task(task_id):
-            def save_changes(task_data):
-                print(f"Saving changes for task {task_id}: {task_data}")
-                # Implement other saving logic here
-
-            edit_window = EditTaskView(
-                self.root, task_id=task_id, save_callback=save_changes
-            )
-            edit_window.grab_set()  # Make window modal
-
         # Menu Button with icon
         try:
             menu_icon = resize_image(os.path.join(assets_dir, "menu.png"), 20, 20)
             menu_button = tk.Button(
-                nav_bar,
+                self.nav_bar,  # Use self.nav_bar instead of nav_bar
                 image=menu_icon,
                 command=self.toggle_filter_menu,
                 bg="#B6EEFB",
@@ -355,24 +340,25 @@ class TaskManagerGUI:
             )
             menu_button.pack(side=tk.LEFT, padx=10, pady=10)
 
-        # Add Task Button (now using the class method)
+        # Add Task Button
         add_task_button = CustomButton(
             self.nav_bar, text="+ Add Task", command=self.add_new_task
         )
         add_task_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
-        # Add Course Button - place it next to Add Task
+        # Add Course Button
         add_course_button = CustomButton(
             self.nav_bar, text="+ Add Course", command=self.add_new_course
         )
         add_course_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
-        # Add Export Tasks Button
+        # Export Tasks Button
         export_tasks_button = CustomButton(
             self.nav_bar, text="Export Tasks", command=self.export_tasks
         )
         export_tasks_button.pack(side=tk.RIGHT, padx=10, pady=10)
 
+        # Import Tasks Button
         import_tasks_button = CustomButton(
             self.nav_bar, text="Import Tasks", command=self.import_tasks
         )
@@ -383,17 +369,7 @@ class TaskManagerGUI:
         self.task_container.pack(fill="both", expand=True, padx=20, pady=20)
 
         # Display existing tasks if any
-        for task in self.all_tasks:
-            task_item = TaskItem(
-                self.task_container,
-                task.title,
-                task.description,
-                "CS 2450",  # TODO: Get actual course code
-                task.due_date,
-                delete_callback=self.delete_task,
-                edit_callback=self.edit_task,
-            )
-            task_item.pack(fill="x", padx=5, pady=5)
+        self.refresh_task_list()
 
     def filter_tasks(self, course, date_filter):
         """Filter tasks based on criteria"""
