@@ -100,7 +100,6 @@ class TaskManagerGUI:
 
         def save_new_course(course_data):
             try:
-
                 # Generate a new course ID (simple increment for now)
                 new_id = len(self.course_list.courses) + 1
 
@@ -127,6 +126,10 @@ class TaskManagerGUI:
 
                 # Add to CourseList
                 self.course_list.add_course(new_course)
+
+                # Update the filter dropdown menu
+                self.update_course_filters()
+
                 messagebox.showinfo(
                     "Success", f"Course \"{course_data['name']}\" added successfully!"
                 )
@@ -138,10 +141,17 @@ class TaskManagerGUI:
         add_window.grab_set()
 
     def update_course_filters(self):
-        """Update the course filter dropdown with current courses"""
-        course_codes = [course.code for course in self.course_list.courses]
-        # Update filter menu courses - assuming filter_menu is accessible
-        self.filter_menu.update_courses(course_codes)
+        """Update the course filters in the filter dropdown menu."""
+        if self.filter_menu:
+            # Clear the current dropdown options
+            self.filter_menu.course_dropdown["values"] = []
+
+            # Populate the dropdown with the updated course list
+            course_codes = [course.code for course in self.course_list.courses]
+            self.filter_menu.course_dropdown["values"] = ["All Courses"] + course_codes
+
+            # Reset the dropdown selection to "All Courses"
+            self.filter_menu.course_var.set("All Courses")
 
     def save_new_task(self, task_data):
         try:
