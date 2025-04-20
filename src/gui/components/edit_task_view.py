@@ -11,8 +11,8 @@ class EditTaskView(tk.Toplevel):
         self.title("Edit Task")
         self.geometry("600x500")
         self.task_id = task_id
-        self.task_data = task_data
-        self.course_list = course_list or []  # Default to an empty list if no courses are provided
+        self.task_data = task_data or {}
+        self.course_list = course_list or []  # Ensure course_list contains course codes
         self.save_callback = save_callback
 
         # Create entry fields
@@ -86,7 +86,7 @@ class EditTaskView(tk.Toplevel):
         tk.Label(main_container, text="Course:").grid(
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
-        self.course_var = tk.StringVar(value=self.task_data.get("course", ""))
+        self.course_var = tk.StringVar(value=self.task_data.get("course", "Unknown Course"))
         self.course_combo = ttk.Combobox(main_container, textvariable=self.course_var)
         self.course_combo["values"] = self.course_list  # Populate with the provided course list
         self.course_combo.grid(row=4, column=1, padx=5, pady=5, sticky="w")

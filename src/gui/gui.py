@@ -266,31 +266,46 @@ class TaskManagerGUI:
 
         add_window.grab_set()
 
-    def apply_filters(self, course):
-        """Apply filters to tasks and update display"""
-        # Clear current tasks
+    def apply_filters(self, selected_course):
+        """Apply filters to tasks and update the display."""
+        # Filter tasks based on the selected course
+        if selected_course == "All Courses":
+            filtered_tasks = self.all_tasks  # Show all tasks if "All Courses" is selected
+        else:
+            # Find the course ID corresponding to the selected course code
+            course = next(
+                (course for course in self.course_list.courses if course.code == selected_course),
+                None,
+            )
+            if course:
+                filtered_tasks = [
+                    task for task in self.all_tasks if task.course_id == course.id
+                ]
+            else:
+                filtered_tasks = []  # No tasks match the selected course
+
+        # Refresh the task list with the filtered tasks
+        self.refresh_task_list(filtered_tasks)
+
+        # If no tasks match, display a message in the task container
+        if not filtered_tasks:
+            self.display_no_tasks_message()
+
+    def display_no_tasks_message(self):
+        """Display a message when no tasks match the selected filter."""
+        # Clear the task container
         for widget in self.task_container.winfo_children():
             widget.destroy()
-
-        # Filter tasks
-        filtered_tasks = [
-            task
-            for task in self.all_tasks
-            if course == "All Courses" or task.course_id == course
-        ]
-
-        # Display filtered tasks
-        for task in filtered_tasks:
-            task_item = TaskItem(
-                self.task_container,
-                task.title,
-                task.description,
-                task.course_id,
-                task.due_date,
-                delete_callback=self.delete_task,
-                edit_callback=self.edit_task,
-            )
-            task_item.pack(fill="x", padx=5, pady=5)
+    
+        # Display a "No tasks found" message
+        no_tasks_label = tk.Label(
+            self.task_container,
+            text="No tasks found for the selected course.",
+            bg="#E6E6E6",
+            fg="gray",
+            font=("Arial", 12, "italic"),
+        )
+        no_tasks_label.pack(pady=20)
 
     def display_filtered_tasks(self, filtered_tasks):
         # Display filtered tasks
@@ -478,8 +493,12 @@ class TaskManagerGUI:
             messagebox.showerror("Error", "Task not found.")
             return
 
-        # Get the current course list
-        course_codes = [course.code for course in self.course_list.courses]
+        # Get the current course code for the task
+        course = next(
+            (course for course in self.course_list.courses if course.id == task_to_edit.course_id),
+            None,
+        )
+        current_course_code = course.code if course else "Unknown Course"
 
         # Open the edit task window with current task data
         edit_window = EditTaskView(
@@ -490,9 +509,9 @@ class TaskManagerGUI:
                 "description": task_to_edit.description,
                 "due_date": task_to_edit.due_date,
                 "status": task_to_edit.status,
-                "course": task_to_edit.course_id,  # Pass the course ID
+                "course": current_course_code,  # Pass the current course code
             },
-            course_list=course_codes,  # Pass the current course list
+            course_list=[course.code for course in self.course_list.courses],  # Pass course codes
             save_callback=self.save_changes,
         )
         edit_window.grab_set()
@@ -528,14 +547,17 @@ class TaskManagerGUI:
         except ValueError as e:
             messagebox.showerror("Error", str(e))
 
-    def refresh_task_list(self):
+    def refresh_task_list(self, tasks=None):
         """Clear and repopulate the task container with updated tasks."""
+        # Use all tasks if no specific list is provided
+        tasks = tasks or self.all_tasks
+
         # Clear the task container
         for widget in self.task_container.winfo_children():
             widget.destroy()
 
         # Redisplay all tasks
-        for task in self.all_tasks:
+        for task in tasks:
             # Get the course code for the task
             course = next(
                 (course for course in self.course_list.courses if course.id == task.course_id),
