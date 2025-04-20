@@ -6,12 +6,13 @@ from tkcalendar import Calendar
 
 
 class EditTaskView(tk.Toplevel):
-    def __init__(self, parent, task_id, task_data=None, save_callback=None):
+    def __init__(self, parent, task_id, task_data=None, course_list=None, save_callback=None):
         super().__init__(parent)
         self.title("Edit Task")
         self.geometry("600x500")
         self.task_id = task_id
-        self.task_data = task_data
+        self.task_data = task_data or {}
+        self.course_list = course_list or []  # Ensure course_list contains course codes
         self.save_callback = save_callback
 
         # Create entry fields
@@ -85,13 +86,9 @@ class EditTaskView(tk.Toplevel):
         tk.Label(main_container, text="Course:").grid(
             row=4, column=0, padx=5, pady=5, sticky="e"
         )
-        self.course_var = tk.StringVar(value=self.task_data.get("course", "CS 2450"))
+        self.course_var = tk.StringVar(value=self.task_data.get("course", "Unknown Course"))
         self.course_combo = ttk.Combobox(main_container, textvariable=self.course_var)
-        self.course_combo["values"] = (
-            "CS 2450",
-            "CS 3060",
-            "CS 2420",
-        )  # TODO: Get from CourseList
+        self.course_combo["values"] = self.course_list  # Populate with the provided course list
         self.course_combo.grid(row=4, column=1, padx=5, pady=5, sticky="w")
 
         # Status (move to row 5)
@@ -124,6 +121,7 @@ class EditTaskView(tk.Toplevel):
         )
 
     def save_task(self):
+        """Collect updated task data and call the save callback."""
         if self.save_callback:
             task_data = {
                 "name": self.name_entry.get(),
@@ -132,5 +130,8 @@ class EditTaskView(tk.Toplevel):
                 "status": self.status_var.get(),
                 "course": self.course_var.get(),
             }
+            # Call the save callback to update the task
             self.save_callback(task_data, self.task_id)
+
+# Close the edit window
         self.destroy()
