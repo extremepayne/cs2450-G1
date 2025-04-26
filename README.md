@@ -1,5 +1,5 @@
 # Task Manager
-This is a task manager for students.
+This is a task manager for students, by students. It handles courses and tasks within it. Setup deadlines for tasks and course dates, set status of tasks to make your student life easier.
 
 # Installation
 Download the corresponding .zip file for your system, extract it, and open up the TaskManager app found inside of it.
