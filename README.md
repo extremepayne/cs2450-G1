@@ -58,3 +58,4 @@ In the default home page of the application, courses and tasks are shown in nest
     - Sort: On the top-right corner is a drop down menu, which contains sorting options for the tasks.
 # Artifacts
 **ZenHub board:** [https://app.zenhub.com/workspaces/2450-group-1-67a67af4a0f29f0029d41e97/board](https://app.zenhub.com/workspaces/2450-group-1-67a67af4a0f29f0029d41e97/board)
+**Presentation:** [docs/Group 1 Presentation]
